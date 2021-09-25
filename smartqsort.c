@@ -48,12 +48,9 @@ void qsort(int* randomArray, int low, int high)
         {
             insertionSort(randomArray, low, p);
         }
-        else
+        else if (p > low)
         {
-            if (p > low)
-            {
                 qsort(randomArray, low, p - 1);
-            }
         }
 
         if (high - p < 10)
@@ -141,28 +138,3 @@ int main()
     }
     free(randomArray);
 }
-
-/*
-#include <iostream>
-
-int main()
-{
-    int n;
-    std::cin >> n;
-    int ar[1010];
-    for (int i = 0; i < n; ++i) {
-        std::cin >> ar[i];
-    }
-    int l = 0;
-    int r = n - 1;
-    int need;
-    std::cin >> need;
-    while (l + 1 < r) {//log(n)
-        int med = l + (r - l) / 2;
-        if (ar[med] >= need) r = med;
-        else l = med;
-    }
-    if (ar[l] == need || ar[r] == need) std::cout << "Number " << need << " contains in array";
-    else std::cout << "Number " << need << " not contains in array";
-}
-*/
