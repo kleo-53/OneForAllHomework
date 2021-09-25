@@ -50,7 +50,10 @@ void qsort(int* randomArray, int low, int high)
         }
         else
         {
-            qsort(randomArray, low, p - 1);
+            if (p > low)
+            {
+                qsort(randomArray, low, p - 1);
+            }
         }
 
         if (high - p < 10)
