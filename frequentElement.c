@@ -1,4 +1,5 @@
-﻿#include <stdio.h>
+#include <stdio.h>
+#include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -7,7 +8,7 @@
 
 int comparator(const int* first, const int* second)
 {
-    return (*(int*)first - *(int*)second);
+    return (*first - *second);
 }
 
 void swap(int* first, int* second)
@@ -17,32 +18,59 @@ void swap(int* first, int* second)
     *second = temporary;
 }
 
-int partition(int* randomArray, int low, int high)
+int partition(int* Array, int low, int high)
 {
-    int pivot = randomArray[high];
+    int pivot = Array[high];
     int i = low;
     for (int j = low; j < high; ++j)
     {
-        if (randomArray[j] <= pivot)
+        if (Array[j] <= pivot)
         {
-            swap(&randomArray[i], &randomArray[j]);
+            swap(&Array[i], &Array[j]);
             ++i;
         }
     }
-    swap(&randomArray[i], &randomArray[high]);
+    swap(&Array[i], &Array[high]);
     return i;
 }
 
-void myQsort(int* randomArray, int low, int high)
+void myQsort(int* Array, int low, int high)
 {
-    if (low < high)
+    if (low >= high)
     {
-        int p = partition(randomArray, low, high);
-        if (p > low)
+        return;
+    }
+    const int p = partition(Array, low, high);
+    if (p > low)
+    {
+        myQsort(Array, low, p - 1);
+    }
+    myQsort(Array, p + 1, high);
+}
+
+void frequentElementCheck(int * Array, int arraySize, int* maximumCounter, int* frequentElement)
+{
+    int currentCounter = 1;
+    for (int i = 1; i < arraySize; ++i)
+    {
+        if (Array[i - 1] != Array[i])
         {
-            myQsort(randomArray, low, p - 1);
+            if (currentCounter > *maximumCounter)
+            {
+                *maximumCounter = currentCounter;
+                currentCounter = 1;
+                *frequentElement = Array[i - 1];
+            }
         }
-        myQsort(randomArray, p + 1, high);
+        else
+        {
+            ++currentCounter;
+        }
+    }
+    if (currentCounter > *maximumCounter)
+    {
+        *maximumCounter = currentCounter;
+        *frequentElement = Array[arraySize - 1];
     }
 }
 
@@ -58,39 +86,14 @@ bool testCorrectCase()
     {
         if (randomArray[i] != correctArray[i])
         {
-            return false; 
+            return false;
         }
     }
 
     int maximumCounter = 1;
     int frequentElement = randomArray[0];
-    int currentCounter = 1;
-    for (int i = 1; i < ARRAYSIZE; ++i) //frequent element check
-    {
-        if (randomArray[i - 1] != randomArray[i])
-        {
-            if (currentCounter > maximumCounter)
-            {
-                maximumCounter = currentCounter;
-                currentCounter = 1;
-                frequentElement = randomArray[i - 1];
-            }
-        }
-        else
-        {
-            ++currentCounter;
-        }
-    }
-    if (currentCounter > maximumCounter)
-    {
-        maximumCounter = currentCounter;
-        frequentElement = randomArray[ARRAYSIZE - 1];
-    }
-    if ((frequentElement != 5 && frequentElement != -4) && (maximumCounter != 2)) 
-    {
-        return false;
-    }
-    return true;
+    frequentElementCheck(randomArray, ARRAYSIZE, &maximumCounter, &frequentElement);
+    return frequentElement == 5 || frequentElement == -4 || maximumCounter == 2;
 }
 
 int main()
@@ -117,7 +120,7 @@ int main()
         return -1;
     }
 
-    srand(time(NULL));
+    srand((unsigned int)time((time_t)NULL));
     printf("Elements of array: \n");
     for (int i = 0; i < arraySize; ++i)
     {
@@ -129,28 +132,7 @@ int main()
 
     int maximumCounter = 1;
     int frequentElement = randomArray[0];
-    int currentCounter = 1;
-    for (int i = 1; i < arraySize; ++i)
-    {
-        if (randomArray[i - 1] != randomArray[i])
-        {
-            if (currentCounter > maximumCounter)
-            {
-                maximumCounter = currentCounter;
-                currentCounter = 1;
-                frequentElement = randomArray[i - 1];
-            }
-        }
-        else
-        {
-            ++currentCounter;
-        }
-    }
-    if (currentCounter > maximumCounter)
-    {
-        maximumCounter = currentCounter;
-        frequentElement = randomArray[arraySize - 1];
-    }
+    frequentElementCheck(randomArray, arraySize, &maximumCounter, &frequentElement);
     printf("\nThe most common array element is %d. It occurs in an array %d times.", frequentElement, maximumCounter);
 
     free(randomArray);
