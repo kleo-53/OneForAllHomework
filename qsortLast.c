@@ -1,4 +1,5 @@
-﻿#include <stdio.h>
+#include <stdio.h>
+#include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -17,17 +18,17 @@ int comparator(const int* first, const int* second)
     return (*(int*)first - *(int*)second);
 }
 
-void insertionSort(int* randomArray, int low, int high)
+void insertionSort(int* Array, int low, int high)
 {
     for (int j = low + 1; j <= high; ++j)
     {
-        const int currentElement = randomArray[j];
-        int i;
-        for (i = j; i > low; --i)
+        const int currentElement = Array[j];
+        int i = j;
+        for (i; i > low; --i)
         {
-            if (currentElement < randomArray[i - 1])
+            if (currentElement < Array[i - 1])
             {
-                randomArray[i] = randomArray[i - 1];
+                Array[i] = Array[i - 1];
             }
             else
             {
@@ -36,7 +37,7 @@ void insertionSort(int* randomArray, int low, int high)
         }
         if (i != j)
         {
-            randomArray[i] = currentElement;
+            Array[i] = currentElement;
         }
     }
 }
@@ -59,26 +60,22 @@ int partition(int* randomArray, int low, int high)
 
 void myQsort(int* randomArray, int low, int high)
 {
-    if (low < high)
+    if (low >= high)
+    {
+        return;
+    }
+    if (high - low < 10)
+    {
+        insertionSort(randomArray, low, high);
+    }
+    else
     {
         int p = partition(randomArray, low, high);
-        if (p - low < 10)
-        {
-            insertionSort(randomArray, low, p - 1);
-        }
-        else if (p > low)
-        {
+         if (p > low)
+         {
             myQsort(randomArray, low, p - 1);
-        }
-
-        if (high - p < 10)
-        {
-            insertionSort(randomArray, p + 1, high);
-        }
-        else
-        {
-            myQsort(randomArray, p + 1, high);
-        }
+         }
+         myQsort(randomArray, p + 1, high);
     }
 }
 
@@ -87,7 +84,7 @@ bool testCorrectCase()
 {
     int correctArray[ARRAYSIZE] = { 0 };
     int randomArray[ARRAYSIZE] = { 0 };
-    srand(time(NULL));
+    srand((unsigned int)time((time_t)NULL));
     for (int i = 0; i < ARRAYSIZE; ++i)
     {
         const int randomElement = -ARRAYSIZE / 2 + rand() % RANGE;
@@ -149,7 +146,6 @@ int main()
         return -1;
     }
 
-    srand(time(NULL));
     printf("Elements of array: \n");
     for (int i = 0; i < arraySize; ++i)
     {
