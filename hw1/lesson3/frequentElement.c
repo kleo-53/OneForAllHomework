@@ -136,4 +136,6 @@ int main()
     printf("\nThe most common array element is %d. It occurs in an array %d times.", frequentElement, maximumCounter);
 
     free(randomArray);
+
+    printf("test git");
 }
