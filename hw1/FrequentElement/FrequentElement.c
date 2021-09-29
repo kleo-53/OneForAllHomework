@@ -34,7 +34,7 @@ int partition(int* Array, int low, int high)
     return i;
 }
 
-void myQsort(int* Array, int low, int high)
+void MyQsort(int* Array, int low, int high)
 {
     if (low >= high)
     {
@@ -43,12 +43,12 @@ void myQsort(int* Array, int low, int high)
     const int p = partition(Array, low, high);
     if (p > low)
     {
-        myQsort(Array, low, p - 1);
+        MyQsort(Array, low, p - 1);
     }
-    myQsort(Array, p + 1, high);
+    MyQsort(Array, p + 1, high);
 }
 
-void frequentElementCheck(int* Array, int arraySize, int* maximumCounter, int* frequentElement)
+void FrequentElementCheck(int* Array, int arraySize, int* maximumCounter, int* frequentElement)
 {
     int currentCounter = 1;
     for (int i = 1; i < arraySize; ++i)
@@ -74,13 +74,13 @@ void frequentElementCheck(int* Array, int arraySize, int* maximumCounter, int* f
     }
 }
 
-bool testCorrectCase()
+bool TestCorrectCase()
 {
     int randomArray[ARRAYSIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
     int correctArray[ARRAYSIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
 
     qsort(correctArray, ARRAYSIZE, sizeof(int), comparator);
-    myQsort(randomArray, 0, ARRAYSIZE - 1);
+    MyQsort(randomArray, 0, ARRAYSIZE - 1);
 
     for (int i = 0; i < ARRAYSIZE; ++i) //qsort check
     {
@@ -92,13 +92,13 @@ bool testCorrectCase()
 
     int maximumCounter = 1;
     int frequentElement = randomArray[0];
-    frequentElementCheck(randomArray, ARRAYSIZE, &maximumCounter, &frequentElement);
+    FrequentElementCheck(randomArray, ARRAYSIZE, &maximumCounter, &frequentElement);
     return frequentElement == 5 || frequentElement == -4 || maximumCounter == 2;
 }
 
 int main()
 {
-    if (!testCorrectCase())
+    if (!TestCorrectCase())
     {
         printf("Tests failed.");
         return 1;
@@ -128,11 +128,11 @@ int main()
         randomArray[i] = randomElement;
         printf("%d ", randomArray[i]);
     }
-    myQsort(randomArray, 0, arraySize - 1);
+    MyQsort(randomArray, 0, arraySize - 1);
 
     int maximumCounter = 1;
     int frequentElement = randomArray[0];
-    frequentElementCheck(randomArray, arraySize, &maximumCounter, &frequentElement);
+    FrequentElementCheck(randomArray, arraySize, &maximumCounter, &frequentElement);
     printf("\nThe most common array element is %d. It occurs in an array %d times.", frequentElement, maximumCounter);
 
     free(randomArray);
