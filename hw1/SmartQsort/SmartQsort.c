@@ -90,7 +90,7 @@ bool CheckEqual(int* Array, int* correctArray)
     return true;
 }
 
-bool testCorrectCase()
+bool TestCorrectCase()
 {
     int correctArray[ARRAY_SIZE] = { 0 };
     int randomArray[ARRAY_SIZE] = { 0 };
@@ -107,7 +107,7 @@ bool testCorrectCase()
     return(CheckEqual(randomArray, correctArray));
 }
 
-bool testEqualCase()
+bool TestEqualCase()
 {
     int randomArray[ARRAY_SIZE] = { -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5 };
     int correctArray[ARRAY_SIZE] = { -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5 };
@@ -118,7 +118,7 @@ bool testEqualCase()
 
 int main()
 {
-    if (!testCorrectCase() || !testEqualCase())
+    if (!TestCorrectCase() || !TestEqualCase())
     {
         printf("Tests failed.");
         return 1;
