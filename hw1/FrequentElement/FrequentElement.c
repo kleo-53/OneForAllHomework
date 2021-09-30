@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define ARRAYSIZE 20
+#define ARRAY_SIZE 20
 #define RANGE 11
 
 int comparator(const int* first, const int* second)
@@ -20,7 +20,7 @@ void swap(int* first, int* second)
 
 int partition(int* sortingArray, int low, int high)
 {
-    int pivot = sortingArray[high];
+    const int pivot = sortingArray[high];
     int i = low;
     for (int j = low; j < high; ++j)
     {
@@ -74,25 +74,33 @@ void frequentElementCheck(int* inputArray, int arraySize, int* maximumCounter, i
     }
 }
 
-bool testCorrectCase()
+bool qsortChesk(int* sortingArray, int* correctArray, int arraySize)
 {
-    int randomArray[ARRAYSIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
-    int correctArray[ARRAYSIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
-
-    qsort(correctArray, ARRAYSIZE, sizeof(int), comparator);
-    myQsort(randomArray, 0, ARRAYSIZE - 1);
-
-    for (int i = 0; i < ARRAYSIZE; ++i) //qsort check
+    for (int i = 0; i < ARRAY_SIZE; ++i)
     {
-        if (randomArray[i] != correctArray[i])
+        if (sortingArray[i] != correctArray[i])
         {
             return false;
         }
     }
+    return true;
+}
+
+bool testCorrectCase()
+{
+    int sortingArray[ARRAY_SIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
+    int correctArray[ARRAY_SIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
+
+    qsort(correctArray, ARRAY_SIZE, sizeof(int), comparator);
+    myQsort(sortingArray, 0, ARRAY_SIZE - 1);
+    if (!qsortChesk(sortingArray, correctArray, ARRAY_SIZE))
+    {
+        return false;
+    }
 
     int maximumCounter = 1;
-    int frequentElement = randomArray[0];
-    frequentElementCheck(randomArray, ARRAYSIZE, &maximumCounter, &frequentElement);
+    int frequentElement = sortingArray[0];
+    frequentElementCheck(sortingArray, ARRAY_SIZE, &maximumCounter, &frequentElement);
     return frequentElement == 5 || frequentElement == -4 || maximumCounter == 2;
 }
 
