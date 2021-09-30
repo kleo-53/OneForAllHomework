@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -8,7 +8,7 @@
 
 int comparator(const int* first, const int* second)
 {
-    return (*first - *second);
+    return *first - *second;
 }
 
 void swap(int* first, int* second)
@@ -18,42 +18,42 @@ void swap(int* first, int* second)
     *second = temporary;
 }
 
-int partition(int* Array, int low, int high)
+int partition(int* sortingArray, int low, int high)
 {
-    const int pivot = Array[high];
+    const int pivot = sortingArray[high];
     int i = low;
     for (int j = low; j < high; ++j)
     {
-        if (Array[j] <= pivot)
+        if (sortingArray[j] <= pivot)
         {
-            swap(&Array[i], &Array[j]);
+            swap(&sortingArray[i], &sortingArray[j]);
             ++i;
         }
     }
-    swap(&Array[i], &Array[high]);
+    swap(&sortingArray[i], &sortingArray[high]);
     return i;
 }
 
-void MyQsort(int* Array, int low, int high)
+void myQsort(int* sortingArray, int low, int high)
 {
     if (low >= high)
     {
         return;
     }
-    const int p = partition(Array, low, high);
+    const int p = partition(sortingArray, low, high);
     if (p > low)
     {
-        MyQsort(Array, low, p - 1);
+        myQsort(sortingArray, low, p - 1);
     }
-    MyQsort(Array, p + 1, high);
+    myQsort(sortingArray, p + 1, high);
 }
 
-bool BinSearch(int* Array, int leftElement, int rightElement, int needElement)
+bool binSearch(int* sortingArray, int leftElement, int rightElement, int needElement)
 {
     while (leftElement + 1 < rightElement)
-    { //log(n)
+    { 
         const int middle = (leftElement + rightElement) / 2;
-        if (Array[middle] >= needElement)
+        if (sortingArray[middle] >= needElement)
         {
             rightElement = middle;
         }
@@ -62,14 +62,14 @@ bool BinSearch(int* Array, int leftElement, int rightElement, int needElement)
             leftElement = middle;
         }
     }
-    return Array[leftElement] == needElement || Array[rightElement] == needElement;
+    return sortingArray[leftElement] == needElement || sortingArray[rightElement] == needElement;
 }
 
-bool CheckQSort(int* Array, int* correctArray, int arraySize)
+bool checkQSort(int* sortingArray, int* correctArray, int arraySize)
 {
     for (int i = 0; i < arraySize; ++i)
     {
-        if (Array[i] != correctArray[i])
+        if (sortingArray[i] != correctArray[i])
         {
             return false;
         }
@@ -77,18 +77,18 @@ bool CheckQSort(int* Array, int* correctArray, int arraySize)
     return true;
 }
 
-bool CheckBinSearch(int* Array, int* elements, int arraySize)
+bool checkBinSearch(int* sortingArray, int* elements, int arraySize)
 {
     for (int i = 0; i < arraySize / 2; ++i)
     {
-        if (!BinSearch(Array, 0, arraySize, elements[i]))
+        if (!binSearch(sortingArray, 0, arraySize, elements[i]))
         {
             return false;
         }
     }
     for (int i = arraySize / 2; i < arraySize; ++i)
     {
-        if (BinSearch(Array, 0, arraySize, elements[i]))
+        if (binSearch(sortingArray, 0, arraySize, elements[i]))
         {
             return false;
         }
@@ -96,20 +96,20 @@ bool CheckBinSearch(int* Array, int* elements, int arraySize)
     return true;
 }
 
-bool TestCorrectCase()
+bool testCorrectCase()
 {
-    int randomArray[ARRAY_SIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
+    int sortingArray[ARRAY_SIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
     int correctArray[ARRAY_SIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
     int elements[ARRAY_SIZE] = { -4, 0, -321, -42, 6, 111, -53, 5, 5, 0, 77, 78, 31, 329, 70, -2, 101, -44, -8, 48 };
 
     qsort(correctArray, ARRAY_SIZE, sizeof(int), comparator);
-    MyQsort(randomArray, 0, ARRAY_SIZE - 1);
-    return CheckQSort(randomArray, correctArray, ARRAY_SIZE) && CheckBinSearch(randomArray, elements, ARRAY_SIZE);
+    myQsort(sortingArray, 0, ARRAY_SIZE - 1);
+    return checkQSort(sortingArray, correctArray, ARRAY_SIZE) && checkBinSearch(sortingArray, elements, ARRAY_SIZE);
 }
 
 int main()
 {
-    if (!TestCorrectCase())
+    if (!testCorrectCase())
     {
         printf("Tests failed.");
         return 1;
@@ -124,8 +124,8 @@ int main()
         return 1;
     }
 
-    int* randomArray = (int*)calloc(arraySize, sizeof(int));
-    if (randomArray == NULL)
+    int* inputArray = (int*)calloc(arraySize, sizeof(int));
+    if (inputArray == NULL)
     {
         printf("Calloc function broke :(");
         return -1;
@@ -136,10 +136,10 @@ int main()
     for (int i = 0; i < arraySize; ++i)
     {
         const int randomElement = -RANGE / 2 + rand() % RANGE;
-        randomArray[i] = randomElement;
-        printf("%d ", randomArray[i]);
+        inputArray[i] = randomElement;
+        printf("%d ", inputArray[i]);
     }
-    MyQsort(randomArray, 0, arraySize - 1);
+    myQsort(inputArray, 0, arraySize - 1);
 
     int amountNumbers = 0;
     printf("\nEnter amount of elements to search: ");
@@ -148,7 +148,7 @@ int main()
     for (int i = 0; i < amountNumbers; ++i)
     {
         const int randomElement = -RANGE / 2 + rand() % RANGE;
-        if (BinSearch(randomArray, 0, arraySize, randomElement))
+        if (binSearch(inputArray, 0, arraySize, randomElement))
         {
             printf("\nNumber %d contains in array", randomElement);
         }
@@ -157,5 +157,5 @@ int main()
             printf("\nNumber %d not contains in array", randomElement);
         }
     }
-    free(randomArray);
+    free(inputArray);
 }
