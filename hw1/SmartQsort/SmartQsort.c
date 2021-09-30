@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -8,27 +8,27 @@
 
 void swap(int* first, int* second)
 {
-    int temporary = *first;
+    const int temporary = *first;
     *first = *second;
     *second = temporary;
 }
 
 int comparator(const int* first, const int* second)
 {
-    return (*first - *second);
+    return *first - *second;
 }
 
-void InsertionSort(int* Array, int low, int high)
+void insertionSort(int* sortingArray, int low, int high)
 {
     for (int j = low + 1; j <= high; ++j)
     {
-        const int currentElement = Array[j];
+        const int currentElement = sortingArray[j];
         int i = j;
         for (; i > low; --i)
         {
-            if (currentElement < Array[i - 1])
+            if (currentElement < sortingArray[i - 1])
             {
-                Array[i] = Array[i - 1];
+                sortingArray[i] = sortingArray[i - 1];
             }
             else
             {
@@ -37,28 +37,28 @@ void InsertionSort(int* Array, int low, int high)
         }
         if (i != j)
         {
-            Array[i] = currentElement;
+            sortingArray[i] = currentElement;
         }
     }
 }
 
-int partition(int* Array, int low, int high)
+int partition(int* sortingArray, int low, int high)
 {
-    const int pivot = Array[high];
+    const int pivot = sortingArray[high];
     int i = low;
     for (int j = low; j < high; ++j)
     {
-        if (Array[j] <= pivot)
+        if (sortingArray[j] <= pivot)
         {
-            swap(&Array[i], &Array[j]);
+            swap(&sortingArray[i], &sortingArray[j]);
             ++i;
         }
     }
-    swap(&Array[i], &Array[high]);
+    swap(&sortingArray[i], &sortingArray[high]);
     return i;
 }
 
-void MyQsort(int* Array, int low, int high)
+void myQsort(int* sortingArray, int low, int high)
 {
     if (low >= high)
     {
@@ -66,23 +66,22 @@ void MyQsort(int* Array, int low, int high)
     }
     if (high - low < 10)
     {
-        InsertionSort(Array, low, high);
+        insertionSort(sortingArray, low, high);
         return;
     }
-    int p = partition(Array, low, high);
+    int p = partition(sortingArray, low, high);
     if (p > low)
     {
-        MyQsort(Array, low, p - 1);
+        myQsort(sortingArray, low, p - 1);
     }
-    MyQsort(Array, p + 1, high);
-
+    myQsort(sortingArray, p + 1, high);
 }
 
-bool CheckEqual(int* Array, int* correctArray)
+bool checkEqual(int* sortingArray, int* correctArray, int arraySize)
 {
-    for (int i = 0; i < ARRAY_SIZE; ++i)
+    for (int i = 0; i < arraySize; ++i)
     {
-        if (Array[i] != correctArray[i])
+        if (sortingArray[i] != correctArray[i])
         {
             return false;
         }
@@ -90,7 +89,7 @@ bool CheckEqual(int* Array, int* correctArray)
     return true;
 }
 
-bool TestCorrectCase()
+bool testCorrectCase()
 {
     int correctArray[ARRAY_SIZE] = { 0 };
     int randomArray[ARRAY_SIZE] = { 0 };
@@ -103,22 +102,22 @@ bool TestCorrectCase()
     }
 
     qsort(correctArray, ARRAY_SIZE, sizeof(int), comparator);
-    MyQsort(randomArray, 0, ARRAY_SIZE - 1);
-    return(CheckEqual(randomArray, correctArray));
+    myQsort(randomArray, 0, ARRAY_SIZE - 1);
+    return checkEqual(randomArray, correctArray, ARRAY_SIZE);
 }
 
-bool TestEqualCase()
+bool testEqualCase()
 {
     int randomArray[ARRAY_SIZE] = { -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5 };
     int correctArray[ARRAY_SIZE] = { -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5 };
 
-    MyQsort(randomArray, 0, ARRAY_SIZE - 1);
-    return(CheckEqual(randomArray, correctArray));
+    myQsort(randomArray, 0, ARRAY_SIZE - 1);
+    return checkEqual(randomArray, correctArray, ARRAY_SIZE);
 }
 
 int main()
 {
-    if (!TestCorrectCase() || !TestEqualCase())
+    if (!testCorrectCase() || !testEqualCase())
     {
         printf("Tests failed.");
         return 1;
@@ -148,7 +147,7 @@ int main()
         printf("%d ", randomArray[i]);
     }
 
-    MyQsort(randomArray, 0, arraySize - 1);
+    myQsort(randomArray, 0, arraySize - 1);
     printf("\n\nArray after using smart kusort: \n");
     for (int i = 0; i < arraySize; ++i)
     {
