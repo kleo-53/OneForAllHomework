@@ -1,4 +1,4 @@
 #pragma once
 
-//this function sorts the array using quicksort
+//This function sorts the array using quicksort
 void myQsort(int* sortingArray, int low, int high);

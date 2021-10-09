@@ -1,20 +1,21 @@
-﻿#include "myQsort.h"
+﻿#pragma warning (disable : 6031)
+
 #include <stdio.h>
 #include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "myQsort.h"
+#include "qsortTests.h"
 
 #define ARRAY_SIZE 20
 #define RANGE 11
 
-int comparator(const int* first, const int* second)
-{
-    return *first - *second;
-}
+#define _CRT_DEFINE_NO_WARNINGS
 
 void frequentElementCheck(int* inputArray, int arraySize, int* maximumCounter, int* frequentElement)
 {
     int currentCounter = 1;
+    *maximumCounter = 0;
     for (int i = 1; i < arraySize; ++i)
     {
         if (inputArray[i - 1] != inputArray[i])
@@ -38,36 +39,6 @@ void frequentElementCheck(int* inputArray, int arraySize, int* maximumCounter, i
     }
 }
 
-bool qsortCheck(int* sortingArray, int* correctArray, int arraySize)
-{
-    for (int i = 0; i < ARRAY_SIZE; ++i)
-    {
-        if (sortingArray[i] != correctArray[i])
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool testCorrectCase()
-{
-    int sortingArray[ARRAY_SIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
-    int correctArray[ARRAY_SIZE] = { -4, 3, 44, -321, -4, 40, 41, -42, -35, 6, 60, 79, -53, 5, 5, -5, 17, 111, 0, -9 };
-
-    qsort(correctArray, ARRAY_SIZE, sizeof(int), comparator);
-    myQsort(sortingArray, 0, ARRAY_SIZE - 1);
-    if (!qsortCheck(sortingArray, correctArray, ARRAY_SIZE))
-    {
-        return false;
-    }
-
-    int maximumCounter = 1;
-    int frequentElement = sortingArray[0];
-    frequentElementCheck(sortingArray, ARRAY_SIZE, &maximumCounter, &frequentElement);
-    return frequentElement == 5 || frequentElement == -4 || maximumCounter == 2;
-}
-
 int main()
 {
     if (!testCorrectCase())
@@ -77,7 +48,8 @@ int main()
     }
 
     FILE* file = fopen("input.txt", "r");
-    if (file == NULL) {
+    if (file == NULL) 
+    {
         printf("file not found!");
         return 1;
     }
@@ -87,6 +59,7 @@ int main()
     if (arraySize < 0)
     {
         printf("Size could not be negative. Please enter correct data.");
+        fclose(file);
         return 1;
     }
 
@@ -94,22 +67,22 @@ int main()
     if (inputArray == NULL)
     {
         printf("Calloc function broke :(");
+        fclose(file);
         return -1;
     }
     int currentElement = 0;
-    while (!feof(file)) {
+    while (!feof(file)) 
+    {
         fscanf(file, "%d", &inputArray[currentElement]);
         ++currentElement;
     }
     fclose(file);
-
-    srand((unsigned int)time((time_t)NULL));
     myQsort(inputArray, 0, arraySize - 1);
 
     int maximumCounter = 1;
     int frequentElement = inputArray[0];
     frequentElementCheck(inputArray, arraySize, &maximumCounter, &frequentElement);
-    printf("\nThe most common array element is %d. It occurs in an array %d times.", frequentElement, maximumCounter);
+    printf("The most common array element in file is %d. It occurs in an array %d times.", frequentElement, maximumCounter);
 
     free(inputArray);
 }
