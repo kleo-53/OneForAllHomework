@@ -164,4 +164,5 @@ int main()
         }
         result = menu(phoneBook, linesRead, addNumber);
     }
+    fclose(file);
 }
