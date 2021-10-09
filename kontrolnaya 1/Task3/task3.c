@@ -10,7 +10,7 @@
 const char* deleteRepeating(char* givenString)
 {
     int stringSize = strlen(givenString);
-    char* resultString = givenString[0];
+    char* resultString = (char*)givenString[0];
     char currentElement = givenString[0];
 
     for (int i = 1; i < stringSize; ++i) 
