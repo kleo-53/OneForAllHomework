@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <locale.h>
 
 #define ARRAY_SIZE 16
 #define RANGE 1001
@@ -150,19 +151,20 @@ int fromBinToDecimal(bool *binNumber, int arraySize)
 
 int main()
 {
-    printf("Enter two numbers: ");
+    setlocale(LC_ALL, "Russian");
+    printf("Введите два числа: ");
     int firstNumber = 0;
     int secondNumber = 0;
     scanf_s("%d %d", &firstNumber, &secondNumber);
 
     bool firstBinNumber[ARRAY_SIZE] = { false };
     binNumber(firstNumber, firstBinNumber);
-    printf("Additional code of first number is: \n");
+    printf("Первое число в двоичной системе: \n");
     printNumber(firstBinNumber, ARRAY_SIZE);
 
     bool secondBinNumber[ARRAY_SIZE] = { false };
     binNumber(secondNumber, secondBinNumber);
-    printf("\nAdditional code of second number is: \n");
+    printf("\nВторое число в двоичной системе: \n");
     printNumber(secondBinNumber, ARRAY_SIZE);
     
     bool summary[ARRAY_SIZE] = { false };
@@ -171,10 +173,10 @@ int main()
         summary[0] = true;
     }
     addition(firstBinNumber, secondBinNumber, summary);
-    printf("\n\nSummary of numbers is: \n");
+    printf("\n\nСумма чисел в двоичной системе: \n");
     printNumber(summary, ARRAY_SIZE);
 
     int decimalSummary = fromBinToDecimal(summary, ARRAY_SIZE);
-    printf("\nThis summary in decimal number system:\n%d", decimalSummary);
+    printf("\nСумма чисел в десятичной системе:\n%d", decimalSummary);
     return 0;
 }
