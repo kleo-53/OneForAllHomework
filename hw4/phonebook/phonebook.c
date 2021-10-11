@@ -1,4 +1,5 @@
-﻿#pragma warning (disable : 6031)
+﻿#define _CRT_SECURE_NO_WARNINGS
+#pragma warning (disable : 4996)
 
 #include <stdio.h>
 #include <time.h>
@@ -8,9 +9,8 @@
 
 #define ARRAY_SIZE 100
 #define RANGE 11
-#define _CRT_DEFINE_NO_WARNINGS
 
-typedef struct PhoneBookEntry 
+typedef struct 
 {
     char name[30];
     char phone[30];
@@ -18,19 +18,16 @@ typedef struct PhoneBookEntry
 
 void addRecord(PhoneBookEntry *phoneBook, int phoneBookSize)
 {
-    PhoneBookEntry entry;
     printf("\nEnter name and surname: ");
-    scanf("%[^\n]%*c", &entry.name);
-
+    scanf_s("%[^\n]%*c", &phoneBook[phoneBookSize].name, 30);
     printf("Enter phone number: ");
-    scanf("%[^\n]%*c", &entry.phone);
-    phoneBook[phoneBookSize] = entry;
+    scanf_s("%[^\n]%*c", &phoneBook[phoneBookSize].phone, 30);
     printf("Record has been added successfully!\n");
 }
 
 void printRecords(PhoneBookEntry* phoneBook, int phoneBookSize)
 {
-    printf("\nThere are all records in file:\n");
+    printf("\nThere are all records in database:\n");
     for (int i = 0; i < phoneBookSize; i++)
     {
         printf("%s: %s\n", phoneBook[i].name, phoneBook[i].phone);
@@ -41,7 +38,7 @@ void findNumber(PhoneBookEntry* phoneBook, int phoneBookSize)
 {
     printf("\nEnter name: ");
     char inputName[30] = "";
-    scanf("%[^\n]%*c", &inputName);
+    scanf_s("%[^\n]%*c", &inputName, 30);
 
     bool findUser = false;
     for (int i = 0; i < phoneBookSize; ++i)
@@ -62,7 +59,7 @@ void findName(PhoneBookEntry* phoneBook, int phoneBookSize)
 {
     printf("\nEnter phone: ");
     char inputNumber[30] = "";
-    scanf("%[^\n]%*c", &inputNumber);
+    scanf_s("%[^\n]%*c", &inputNumber, 30);
 
     bool findUser = false;
     for (int i = 0; i < phoneBookSize; ++i)
@@ -106,7 +103,8 @@ int menu(PhoneBookEntry *phoneBook, int phoneBookSize, int addNumber)
 
     int command = getche();
     printf("\n");
-    switch (command) {
+    switch (command) 
+    {
     case '0':
         return -1;
     case '1':
@@ -145,10 +143,11 @@ int main()
     PhoneBookEntry phoneBook[100];
     while (!feof(file)) 
     {
-        fscanf(file, "%[^:]%*c%*c", &phoneBook[linesRead].name);
-        fscanf(file, "%[^\n%]%*c", &phoneBook[linesRead].phone);
+        fscanf_s(file, "%[^:]%*c%*c", &phoneBook[linesRead].name, 30);
+        fscanf_s(file, "%[^\n%]%*c", &phoneBook[linesRead].phone, 30);
         ++linesRead;
     }
+    fclose(file);
     int addNumber = 0;
     int result = menu(phoneBook, linesRead, addNumber);
     while (result != -1)
@@ -164,5 +163,4 @@ int main()
         }
         result = menu(phoneBook, linesRead, addNumber);
     }
-    fclose(file);
 }
