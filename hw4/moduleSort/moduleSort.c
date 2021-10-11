@@ -1,4 +1,5 @@
-﻿#pragma warning (disable : 6031)
+﻿#define _CRT_SECURE_NO_WARNINGS
+#pragma warning (disable : 4996)
 
 #include <stdio.h>
 #include <time.h>
@@ -9,35 +10,6 @@
 
 #define ARRAY_SIZE 20
 #define RANGE 11
-
-#define _CRT_DEFINE_NO_WARNINGS
-
-void frequentElementCheck(int* inputArray, int arraySize, int* maximumCounter, int* frequentElement)
-{
-    int currentCounter = 1;
-    *maximumCounter = 0;
-    for (int i = 1; i < arraySize; ++i)
-    {
-        if (inputArray[i - 1] != inputArray[i])
-        {
-            if (currentCounter > *maximumCounter)
-            {
-                *maximumCounter = currentCounter;
-                currentCounter = 1;
-                *frequentElement = inputArray[i - 1];
-            }
-        }
-        else
-        {
-            ++currentCounter;
-        }
-    }
-    if (currentCounter > *maximumCounter)
-    {
-        *maximumCounter = currentCounter;
-        *frequentElement = inputArray[arraySize - 1];
-    }
-}
 
 int main()
 {
@@ -55,7 +27,7 @@ int main()
     }
 
     int arraySize = 0;
-    fscanf(file, "%d", &arraySize);
+    fscanf_s(file, "%d", &arraySize);
     if (arraySize < 0)
     {
         printf("Size could not be negative. Please enter correct data.");
@@ -73,7 +45,7 @@ int main()
     int currentElement = 0;
     while (!feof(file)) 
     {
-        fscanf(file, "%d", &inputArray[currentElement]);
+        fscanf_s(file, "%d", &inputArray[currentElement]);
         ++currentElement;
     }
     fclose(file);

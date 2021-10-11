@@ -1,5 +1,4 @@
 #include "myQsort.h"
-#include <stdio.h>
 
 void swap(int* first, int* second)
 {
