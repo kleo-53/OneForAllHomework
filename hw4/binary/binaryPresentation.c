@@ -1,5 +1,4 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-#pragma warning (disable : 4996)
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -9,13 +8,9 @@
 #define ARRAY_SIZE 16
 #define RANGE 1001
 
-int abs(int x) 
-{
-    return x > 0 ? x : -x;
-}
-
 void addition(bool *firstNumber, bool *secondNumber, bool *additionNumber)
 {
+
     bool overflow = false;
     for (int i = ARRAY_SIZE - 1; i > 0; --i)
     {
@@ -45,65 +40,6 @@ void addition(bool *firstNumber, bool *secondNumber, bool *additionNumber)
     }
 }
 
-void subtractionOne(bool* subtractionNumber)
-{
-    bool overflow = true;
-    bool number[ARRAY_SIZE] = { false };
-    for (int i = ARRAY_SIZE - 1; i > -1; --i)
-    {
-        number[i] = subtractionNumber[i];
-    }
-    for (int i = ARRAY_SIZE - 1; i > 0; --i)
-    {
-        if (overflow)
-        {
-            if (number[i])
-            {
-                subtractionNumber[i] = false;
-                overflow = false;
-            }
-            else
-            {
-                subtractionNumber[i] = true;
-            }
-        }
-        else
-        {
-            subtractionNumber[i] = number[i];
-        }
-    }
-}
-
-void binNumber(int number, bool* binNumber)
-{
-    if (number >= 0)
-    {
-        binNumber[0] = false;
-        int bit = 0b1;
-        for (int i = ARRAY_SIZE - 1; i > 0; --i) 
-        {
-            binNumber[i] = ((number & bit) ? true : false);
-            bit = bit << 1;
-        }
-    }
-    else
-    {
-        bool reverseNumber[ARRAY_SIZE] = { false };
-        reverseNumber[0] = true;
-        binNumber[0] = true;
-        number = -number;
-        int bit = 0b1;
-        for (int i = ARRAY_SIZE - 1; i > 0; --i) 
-        {
-            reverseNumber[i] = ((number & bit) ? false : true);
-            bit = bit << 1;
-        }
-        bool one[ARRAY_SIZE] = { false };
-        one[ARRAY_SIZE - 1] = true;
-        addition(reverseNumber, one, binNumber);
-    }
-}
-
 void printNumber(bool *number, int arraySize)
 {
     for (int i = 0; i < arraySize; ++i) 
@@ -112,13 +48,12 @@ void printNumber(bool *number, int arraySize)
     }
 }
 
-int fromBinToDecimal(bool *binNumber, int arraySize)
+/*int fromBinToDecimal(bool* binNumber, int arraySize)
 {
     int decimalNumber = 0;
     int coefficient = 1;
     if (!binNumber[0])
     {
-
         for (int i = arraySize - 1; i > 0; --i)
         {
             decimalNumber += coefficient * binNumber[i];
@@ -130,14 +65,7 @@ int fromBinToDecimal(bool *binNumber, int arraySize)
         subtractionOne(binNumber);
         for (int i = 0; i < arraySize; ++i)
         {
-            if (binNumber[i])
-            {
-                binNumber[i] = false;
-            }
-            else
-            {
-                binNumber[i] = true;
-            }
+            binNumber[i] ? false : true;
         }
         for (int i = arraySize - 1; i > 0; --i)
         {
@@ -147,6 +75,29 @@ int fromBinToDecimal(bool *binNumber, int arraySize)
         decimalNumber = -decimalNumber;
     }
     return decimalNumber;
+}
+*/
+
+void binNumber(int x, bool* number) 
+{
+    int bit = 0b1000000000000000;
+    for (int j = 0; j < 16; ++j)
+    {
+        number[j] = ((x & bit) ? true : false);
+        bit = bit >> 1;
+    }
+}
+
+int toDec(bool* number, int arraySize)
+{
+    int decimal = 0;
+    int bit = 0b1;
+    for (int j = 0; j < 16; ++j)
+    {
+        decimal = ((number[j]) ? (decimal | bit) : decimal);
+        bit = bit << 1;
+    }
+    return decimal;
 }
 
 int main()
@@ -168,15 +119,14 @@ int main()
     printNumber(secondBinNumber, ARRAY_SIZE);
     
     bool summary[ARRAY_SIZE] = { false };
-    if (firstNumber + secondNumber < 0)
-    {
-        summary[0] = true;
-    }
     addition(firstBinNumber, secondBinNumber, summary);
     printf("\n\nСумма чисел в двоичной системе: \n");
     printNumber(summary, ARRAY_SIZE);
 
-    int decimalSummary = fromBinToDecimal(summary, ARRAY_SIZE);
-    printf("\nСумма чисел в десятичной системе:\n%d", decimalSummary);
+    //const int decimalSummary = fromBinToDecimal(summary, ARRAY_SIZE);
+    //printf("\nСумма чисел в десятичной системе:\n%d", decimalSummary);
+    const int summ = firstNumber + secondNumber;
+    printf("\nСумма чисел в десятичной системе:\n%d", summ);
+    printf("\nА по новой функции: %d", toDec(firstBinNumber, ARRAY_SIZE));
     return 0;
 }
