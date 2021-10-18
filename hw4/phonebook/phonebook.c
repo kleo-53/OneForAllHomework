@@ -1,11 +1,11 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-#pragma warning (disable : 4996)
 
 #include <stdio.h>
 #include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <conio.h>
 
 #define ARRAY_SIZE 100
 #define RANGE 11
@@ -76,7 +76,7 @@ void findName(PhoneBookEntry* phoneBook, int phoneBookSize)
     }
 }
 
-void saveAll(PhoneBookEntry* phoneBook, int phoneBookSize, int addNumber)
+int saveAll(PhoneBookEntry* phoneBook, int phoneBookSize, int addNumber)
 {
     FILE* out = fopen("input.txt", "a");
     if (out == NULL) 
@@ -89,6 +89,7 @@ void saveAll(PhoneBookEntry* phoneBook, int phoneBookSize, int addNumber)
     }
     printf("\nRecords has been added to file successfully!\n");
     fclose(out);
+    return 0;
 }
 
 int menu(PhoneBookEntry *phoneBook, int phoneBookSize, int addNumber)
@@ -101,7 +102,7 @@ int menu(PhoneBookEntry *phoneBook, int phoneBookSize, int addNumber)
     printf("\n5 - Save data in file");
     printf("\nChose the command: ");
 
-    int command = getche();
+    int command = _getche();
     printf("\n");
     switch (command) 
     {
