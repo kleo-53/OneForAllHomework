@@ -11,32 +11,6 @@
 #define ARRAY_SIZE 20
 #define RANGE 11
 
-void frequentElementCheck(int* inputArray, int arraySize, int* maximumCounter, int* frequentElement)
-{
-    int currentCounter = 1;
-    *maximumCounter = 0;
-    for (int i = 1; i < arraySize; ++i)
-    {
-        if (inputArray[i - 1] != inputArray[i])
-        {
-            if (currentCounter > *maximumCounter)
-            {
-                *maximumCounter = currentCounter;
-                currentCounter = 1;
-                *frequentElement = inputArray[i - 1];
-            }
-        }
-        else
-        {
-            ++currentCounter;
-        }
-    }
-    if (currentCounter > *maximumCounter)
-    {
-        *maximumCounter = currentCounter;
-        *frequentElement = inputArray[arraySize - 1];
-    }
-}
 
 int main()
 {
