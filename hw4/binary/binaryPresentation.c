@@ -5,14 +5,13 @@
 #include <string.h>
 #include <locale.h>
 
-#define ARRAY_SIZE (sizeof(int) * 8) - 1
+#define ARRAY_SIZE (sizeof(int) * 8)
 #define RANGE 1001
 
 void addition(bool *firstNumber, bool *secondNumber, bool *additionNumber, int arraySize)
 {
-
     bool overflow = false;
-    for (int i = arraySize - 1; i > 0; --i)
+    for (int i = arraySize - 1; i >= 0; --i)
     {
         if (firstNumber[i] && secondNumber[i])
         {
@@ -50,11 +49,11 @@ void printNumber(bool *number, int arraySize)
 
 void binNumber(int x, bool* number, int arraySize) 
 {
-    int bit = 0b1000000000000000000000000000000;
-    for (int j = 0; j < arraySize; ++j)
+    int bit = 1;
+    for (int j = arraySize - 1; j >= 0; --j)
     {
-        number[j] = ((x & bit) ? true : false);
-        bit = bit >> 1;
+        number[j] = ((x & bit) != 0 ? true : false);
+        bit = bit << 1;
     }
 }
 
@@ -99,9 +98,9 @@ bool testCorrectCase()
     bool firstBinNumber[ARRAY_SIZE] = { false };
     binNumber(firstNumber, firstBinNumber, ARRAY_SIZE);
     bool checkFirst[ARRAY_SIZE] = { false };
-    checkFirst[23] = true;
     checkFirst[24] = true;
-    checkFirst[29] = true;
+    checkFirst[25] = true;
+    checkFirst[30] = true;
     if (!compareNumbers(firstBinNumber, checkFirst))
     {
         return false;
@@ -109,9 +108,9 @@ bool testCorrectCase()
     bool secondBinNumber[ARRAY_SIZE] = { false };
     binNumber(secondNumber, secondBinNumber, ARRAY_SIZE);
     bool checkSecond[ARRAY_SIZE] = { false };
-    checkSecond[21] = true;
     checkSecond[22] = true;
-    checkSecond[24] = true;
+    checkSecond[23] = true;
+    checkSecond[25] = true;
     if (!compareNumbers(secondBinNumber, checkSecond))
     {
         return false;
@@ -122,7 +121,7 @@ bool testCorrectCase()
     {
         checkThird[i] = true;
     }
-    checkThird[20] = false;
+    checkThird[21] = false;
     binNumber(thirdNumber, thirdBinNumber, ARRAY_SIZE);
     if (!compareNumbers(thirdBinNumber, checkThird))
     {
@@ -131,8 +130,8 @@ bool testCorrectCase()
     bool summAll[ARRAY_SIZE] = { false };
     addition(firstBinNumber, secondBinNumber, summAll, ARRAY_SIZE);
     bool checkSumm[ARRAY_SIZE] = { false };
-    checkSumm[20] = true;
-    checkSumm[29] = true;
+    checkSumm[21] = true;
+    checkSumm[30] = true;
     if (!compareNumbers(summAll, checkSumm))
     {
         return false;
@@ -155,22 +154,17 @@ bool testCorrectCase()
         return false;
     }
     addition(thirdBinNumber, summAll, summAll, ARRAY_SIZE);
-    checkSumm[20] = false;
-    checkSumm[29] = false;
-    checkSumm[30] = true;
+    checkSumm[21] = false;
+    checkSumm[30] = false;
+    checkSumm[31] = true;
     if (!compareNumbers(summAll, checkSumm))
     {
         return false;
     }
     checkDecimalSum += thirdNumber;
     decimalSum = toDecimal(summAll, ARRAY_SIZE);
-    if (checkDecimalSum != decimalSum)
-    {
-        return false;
-    }
-    return true;
+    return checkDecimalSum == decimalSum;
 }
-
 
 int main()
 {
