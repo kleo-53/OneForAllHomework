@@ -18,13 +18,5 @@
     <ClCompile Include="postfixСalculator.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="stack.c">
-      <Filter>Файлы ресурсов</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stack.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
