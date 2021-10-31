@@ -15,7 +15,7 @@ typedef struct
     char phone[30];
 } PhoneBookEntry;
 
-void findUser(char* inputName, PhoneBookEntry* phoneBook, int phoneBookSize, PhoneBookEntry* answer, int* counterUser)
+void findUser(const char* inputName, const PhoneBookEntry* phoneBook, int phoneBookSize, PhoneBookEntry* answer, int* counterUser)
 {
     for (int i = 0; i < phoneBookSize; ++i)
     {
