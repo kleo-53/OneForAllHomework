@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="postfixСalculator.c" />
     <ClCompile Include="stack.c" />
     <ClCompile Include="stackTests.c" />
   </ItemGroup>

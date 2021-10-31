@@ -18,5 +18,5 @@ int pop(StackElement** head);
 // This boolean function checks if stack is empty
 bool isEmpty(StackElement* head);
 
-// This function delete stack and free the memory
+// This function deletes stack and frees the memory
 void deleteStack(StackElement** head);

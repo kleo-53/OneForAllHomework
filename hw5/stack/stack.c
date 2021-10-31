@@ -1,6 +1,7 @@
 ﻿#include "stack.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 void push(StackElement** head, int number)
 {
