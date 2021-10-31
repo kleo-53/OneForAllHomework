@@ -22,7 +22,7 @@ void findUser(const char* inputName, const PhoneBookEntry* phoneBook, int phoneB
         if (strcmp(phoneBook[i].name, inputName) == 0)
         {
             answer[*counterUser] = phoneBook[i];
-            *counterUser = *counterUser + 1;
+            ++*counterUser;
         }
     }
 }
