@@ -217,12 +217,7 @@ bool testCase()
     strcpy(&testBook[1].name, "One Two");
     strcpy(&testBook[1].phone, "111");
     findNumber(testPhone, phoneBook, linesRead + addNumber, answerBook, &counterUser); 
-    if (counterUser != testCounter || strcmp(&answerBook[0], &testBook[0]) != 0 || strcmp(&answerBook[1], &testBook[1])!= 0)
-    {
-        return false;
-    }
-    
-    return true;
+    return (counterUser != testCounter || strcmp(&answerBook[0], &testBook[0]) != 0 || strcmp(&answerBook[1], &testBook[1])!= 0) ? false : true;
 }
 
 int main()
