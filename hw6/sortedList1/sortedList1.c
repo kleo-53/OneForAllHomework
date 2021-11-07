@@ -23,8 +23,8 @@ int menu(List* myList)
         printf("Enter data: ");
         int data = 0;
         scanf_s("%d%*c", &data);
-        addData(myList, data);
-        printf("The data %d added successfully!\n", data);
+        bool isAdded = addData(myList, data);
+        isAdded ? printf("The data %d added successfully!\n", data) : printf("Did not add data to list:(");
         break;
     }
     case '2':
@@ -32,14 +32,8 @@ int menu(List* myList)
         printf("Enter data: ");
         int data = 0;
         scanf_s("%d%*c", &data);
-        if (!deleteData(myList, data))
-        {
-            printf("This data not in list!\n");
-        }
-        else
-        {
-            printf("The data %d deleted successfully!\n", data);
-        }
+        bool isDeleted = deleteData(myList, data);
+        isDeleted ? printf("This data not in list!\n") : printf("The data %d deleted successfully!\n", data);
         break;
     }
     case '3':
@@ -64,8 +58,42 @@ int menu(List* myList)
     return 0;
 }
 
+bool testAddData()
+{
+    List* myList = createList();
+    bool isAdded = addData(myList, 10);
+    if (!isAdded)
+    {
+        return false;
+    }
+    isAdded = addData(myList, 35);
+    return isAdded;
+}
+
+bool testDeleteData()
+{
+    List* myList = createList();
+    bool isAdded = addData(myList, 10);
+    if (!isAdded)
+    {
+        return false;
+    }
+    bool isDeleted = deleteData(myList, 35);
+    if (isDeleted)
+    {
+        return false;
+    }
+    isDeleted = deleteData(myList, 10);
+    return isDeleted;
+}
+
 int main()
 {
+    if (!testAddData() || !testDeleteData())
+    {
+        printf("Tests failed:(");
+        return -1;
+    }
     List* myList = createList();
     int result = menu(myList);
     while (result != -1)
@@ -73,4 +101,5 @@ int main()
         result = menu(myList);
     }
     deleteList(myList);
+    return 0;
 }
