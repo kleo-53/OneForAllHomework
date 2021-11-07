@@ -13,13 +13,12 @@ typedef struct ListElement
 typedef struct List
 {
     struct ListElement* head;
+    int length;
 } List;
 
 List* createList()
 {
-    List* newList = malloc(sizeof(List*));
-    newList->head = NULL;
-    return newList;
+    return calloc(1, sizeof(List));
 }
 
 bool isEmpty(List* list)
@@ -27,18 +26,21 @@ bool isEmpty(List* list)
     return list->head == NULL;
 }
 
-void addElement(int value, List* list)
+bool addElement(int value, List* list)
 {
-    ListElement* newElement = malloc(sizeof(ListElement));
+    ListElement* newElement = calloc(sizeof(ListElement), 1);
+    if (newElement == NULL)
+    {
+        return false;
+    }
     newElement->value = value;
-    newElement->previous = NULL;
-    newElement->next = NULL;
     if (isEmpty(list))
     {
         newElement->previous = newElement;
         newElement->next = newElement;
         list->head = newElement;
-        return;
+        ++list->length;
+        return true;
     }
     ListElement* previousElement = list->head;
     ListElement* nextElement = previousElement->next;
@@ -46,6 +48,8 @@ void addElement(int value, List* list)
     previousElement->next = newElement;
     newElement->next = nextElement;
     newElement->previous = previousElement;
+    ++list->length;
+    return true;
 }
 
 void passElement(List* list)
@@ -61,22 +65,27 @@ void deleteElement(List* list)
     if (firstElement == previousElement)
     {
         free(firstElement);
-        free(nextElement);
-        free(previousElement);
         list->head = NULL;
+        list->length = 0;
         return;
     }
     nextElement->previous = previousElement;
     previousElement->next = nextElement;
     list->head = previousElement;
+    --list->length;
     free(firstElement);
 }
 
-int printRemaining(List* list)
+int getRemaining(List* list)
 {
     if (isEmpty(list))
     {
         return -1;
     }
     return list->head->value;
+}
+
+int getLength(List* list)
+{
+    return list->length;
 }
