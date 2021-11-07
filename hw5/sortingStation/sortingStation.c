@@ -8,6 +8,8 @@
 #include "../stack/stackTests.h"
 
 #define ARRAY_SIZE 40
+#define ERROR_VALUE -10000007
+#define ERROR_STRING "err"
 
 bool isBracket(char element)
 {
@@ -33,78 +35,113 @@ int givePriority(char operation)
     return operation == '(' ? 0 : 2;
 }
 
-int menu()
+char* menu(char* givenString, int strSize)
 {
-    char str[ARRAY_SIZE];
-    strcpy(str, "");
     StackElement* head = NULL;
     char element = ' ';
-    bool continueWork = true;
-    while (continueWork)
+    int newIndex = 0;
+    int givenIndex = 0;
+    char resultString[ARRAY_SIZE] = "";
+    while (givenIndex != strSize)
     {
-        scanf_s("%c", &element, 1);
-        if (element == '\n')
+        element = givenString[givenIndex];
+        if (isDigit(element))
         {
-            continueWork = false;
-        }
-        else if (isDigit(element))
-        {
-            strcat(&str, element);
+            resultString[newIndex] = element;
+            ++newIndex;
         }
         else if (isOperation(element))
         {
             while (!isEmpty(head))
             {
                 char topElement = pop(&head);
+                if (topElement == ERROR_VALUE)
+                {
+                    return ERROR_STRING;
+                }
                 if (givePriority(topElement) < givePriority(element))
                 {
-                    push(&head, topElement);
+                    bool isAdded = push(&head, topElement);
+                    if (!isAdded)
+                    {
+                        return ERROR_STRING;
+                    }
                     break;
                 }
                 else
                 {
-                    strcat(&str, topElement);
+                    resultString[newIndex] = topElement;
+                    ++newIndex;
                 }
             }
-            push(&head, element);
+            bool isAdded = push(&head, element);
+            if (!isAdded)
+            {
+                return ERROR_STRING;
+            }
         }
         else if (element == '(')
         {
-            push(&head, element);
+            bool isAdded = push(&head, element);
+            if (!isAdded)
+            {
+                return ERROR_STRING;
+            }
         }
         else if (element == ')')
         {
             while (!isEmpty(head))
             {
                 char topElement = pop(&head);
+                if (topElement == ERROR_VALUE)
+                {
+                    return ERROR_STRING;
+                }
                 if (topElement == '(')
                 {
                     break;
                 }
                 else
                 {
-                    strcat(&str, topElement);
+                    resultString[newIndex] = topElement;
+                    ++newIndex;
                 }
             }
         }
+        ++givenIndex;
     }
     while (!isEmpty(head))
     {
-        strcat(&str, pop(&head));
+        resultString[newIndex] = pop(&head);
+        if (resultString[newIndex] == ERROR_VALUE)
+        {
+            return ERROR_STRING;
+        }
+        ++newIndex;
     }
+    return resultString;
+}
+
+bool testCase()
+{
+    char inputString[ARRAY_SIZE] = "(1 + 1)*2";
+    char resultString[ARRAY_SIZE] = "";
+    const char correctString[ARRAY_SIZE] = "11+2*";
+    strcat(resultString, menu(inputString, 10));
+    return !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
 }
 
 int main()
 {
-    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks())
+    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks() || !testCase())
     {
-        printf("Tests failed");
+        printf("Tests failed:(");
         return -1;
     }
-    StackElement* head = NULL;
     char element = ' ';
     bool continueWork = true;
-    menu();
+    char inputString[40] = "";
+    int index = 0;
     while (continueWork)
     {
         scanf_s("%c", &element, 1);
@@ -112,49 +149,22 @@ int main()
         {
             continueWork = false;
         }
-        else if (isDigit(element))
+        else
         {
-            printf("%c ", element);
-        }
-        else if (isOperation(element))
-        {
-            while (!isEmpty(head))
-            {
-                char topElement = pop(&head);
-                if (givePriority(topElement) < givePriority(element))
-                {
-                    push(&head, topElement);
-                    break;
-                }
-                else
-                {
-                    printf("%c ", topElement);
-                }
-            }
-            push(&head, element);
-        }
-        else if (element == '(')
-        {
-            push(&head, element);
-        }
-        else if (element == ')')
-        {
-            while (!isEmpty(head))
-            {
-                char topElement = pop(&head);
-                if (topElement == '(')
-                {
-                    break;
-                }
-                else 
-                {
-                    printf("%c ", topElement);
-                }
-            }
+            inputString[index] = element;
+            ++index;
         }
     }
-    while (!isEmpty(head))
+    char resultString[40] = "";
+    strcat(resultString, menu(inputString, index));
+    if (resultString == ERROR_STRING)
     {
-        printf("%c", pop(&head));
+        printf("Some errors have occured.");
+        return -1;
     }
+    for (int i = 0; i < strlen(resultString); ++i)
+    {
+        printf("%c ", resultString[i]);
+    }
+    return 0;
 }
