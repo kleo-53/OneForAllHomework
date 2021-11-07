@@ -6,38 +6,81 @@
 #include "../stack/stack.h"
 #include "../stack/stackTests.h"
 
-void checkEqual(StackElement** stack, char element)
+#define ARRAY_SIZE 40
+bool smartAddElement(StackElement** stack, char element)
 {
-    if (isEmpty(*stack) || element == '(' || element == '[' || element == '{')
+    if (element == '(' || element == '[' || element == '{')
     {
-        push(stack, element);
-        return;
+        bool isAdded = push(stack, element);
+        return isAdded;
     }
-    else
+    if (isEmpty(*stack))
     {
-        char popElement = pop(stack);
-        if ((popElement == '}' && element == '{') || (popElement == ']' && element == '[') || (popElement == ')' && element == '('))
-        {
-            push(stack, popElement);
-            push(stack, element);
-        }
+        return false;
     }
+    char popElement = pop(stack);
+    if ((popElement == '{' && element == '}') || (popElement == '[' && element == ']') || (popElement == '(' && element == ')'))
+    {
+        return true;
+    }
+    bool isAdded = push(stack, popElement);
+    if (!isAdded)
+    {
+        return false;
+    }
+    isAdded = push(stack, element);
+    return isAdded;
 }
 
 bool isBracket(char element)
 {
     return element == '(' || element == ')' || element == '[' || element == ']' || element == '{' || element == '}';
 }
+
+bool menu(char* givenString, int stringSize)
+{
+    StackElement* head = NULL;
+    char element = ' ';
+    bool continueWork = true;
+    int i = 0;
+    while (i != stringSize)
+    {
+        element = givenString[i];
+        if (isBracket(element))
+        {
+            bool isCorrect = smartAddElement(&head, element);
+            if (!isCorrect)
+            {
+                return false;
+            }
+        }
+        i += 1;
+    }
+    return isEmpty(head);
+}
+
+bool testIncorrectCase()
+{
+    char testString[5] = "({)}";
+    return !menu(testString, 4);
+}
+
+bool testCorrectCase()
+{
+    char testString[17] = "({})[]((([]){}))";
+    return menu(testString, 16);
+}
+
 int main()
 {
-    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks())
+    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks() || !testIncorrectCase() || !testCorrectCase())
     {
         printf("Tests failed");
         return -1;
     }
-    StackElement* head = NULL;
     char element = ' ';
-    char ch = ' ';
+    int stringSize = 0;
+    char inputString[ARRAY_SIZE] = { " " };
     bool continueWork = true;
     while (continueWork)
     {
@@ -46,12 +89,10 @@ int main()
         {
             continueWork = false;
         }
-        else if (isBracket(element))
-        {
-            checkEqual(&head, element);
-        }
+        inputString[stringSize] = element;
+        stringSize += 1;
     }
-    if (isEmpty(head))
+    if (menu(inputString, stringSize))
     {
         printf("This sequence is correct.");
     }
