@@ -1,3 +1,7 @@
+#pragma once
+
+#include <stdbool.h>
+
 // This boolean function checks if stack adds and removes elements correctly
 bool testStackWorks();
 

@@ -2,37 +2,44 @@
 #include "stackTests.h"
 #include <stdio.h>
 
+#define ERROR_VALUE -10000007
+
 bool testStackWorks()
 {
     StackElement* stack = NULL;
-    push(&stack, 10);
-    if (stack->value != 10)
+    bool isAdded = push(&stack, 10);
+    if (!isAdded || stack->value != 10)
     {
+        deleteStack(&stack);
         return false;
     }
-    push(&stack, 11);
-    if (stack->value != 11)
+    isAdded = push(&stack, 11);
+    if (!isAdded || stack->value != 11)
     {
+        deleteStack(&stack);
         return false;
     }
     int popValue = pop(&stack);
     if (popValue != 11 || stack->value != 10)
     {
+        deleteStack(&stack);
         return false;
     }
     popValue = pop(&stack);
-    if (popValue != 10 || stack != NULL)
+    if (popValue == 10 && stack == NULL) 
     {
-        return false;
+        return true;
     }
-    return true;
+    deleteStack(&stack);
+    return false;
 }
 
 bool testPopEmptyStack()
 {
     StackElement* stack = NULL;
     const int popValue = pop(&stack);
-    return popValue == NULL;
+    deleteStack(&stack);
+    return popValue == ERROR_VALUE;
 }
 
 bool testIsEmpty()
@@ -40,8 +47,14 @@ bool testIsEmpty()
     StackElement* stack = NULL;
     if (!isEmpty(stack))
     {
+        deleteStack(&stack);
         return false;
     }
-    push(&stack, 10);
-     return !isEmpty(stack);
+    bool isAdded = push(&stack, 10);
+    if (isEmpty(stack) || !isAdded)
+    {
+        return false;
+    }
+    deleteStack(&stack);
+    return true;
 }

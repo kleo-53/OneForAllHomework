@@ -1,10 +1,10 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "stack.h"
-#include "stackTests.h"
+#include "../stack/stack.h"
+#include "../stack/stackTests.h"
 
 void checkEqual(StackElement** stack, char element)
 {
@@ -16,7 +16,7 @@ void checkEqual(StackElement** stack, char element)
     else
     {
         char popElement = pop(stack);
-        if ((popElement == '}' &&  element == '{') || (popElement == ']' && element == '[') || (popElement == ')' && element == '('))
+        if ((popElement == '}' && element == '{') || (popElement == ']' && element == '[') || (popElement == ')' && element == '('))
         {
             push(stack, popElement);
             push(stack, element);
