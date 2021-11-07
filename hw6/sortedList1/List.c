@@ -44,7 +44,7 @@ int get(List* list, Position* position)
     return position->position->value;
 }
 
-void addData(List* list, int value)
+bool addData(List* list, int value)
 {
     ListElement* current = list->head;
     ListElement* previous = NULL;
@@ -54,6 +54,10 @@ void addData(List* list, int value)
         current = current->next;
     }
     ListElement* newElement = calloc(1, sizeof(ListElement));
+    if (newElement == NULL)
+    {
+        return false;
+    }
     newElement->next = current;
     newElement->value = value;
     if (previous == NULL)
@@ -64,6 +68,7 @@ void addData(List* list, int value)
     {
         previous->next = newElement;
     }
+    return true;
 }
 
 bool deleteData(List* list, int value)

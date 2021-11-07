@@ -16,13 +16,13 @@ void deleteList(List* list);
 // This function checks if list is empty
 bool isEmpty(List* list);
 
-// This function give the value by position of value
+// This function gives the value by position of value
 int get(List * list, Position * position);
 
 // This function finds suitable position to value and add them to list
-void addData(List* list, int value);
+bool addData(List* list, int value);
 
-// This function finds the position by value and deletes them from list
+// This function finds the position by value and deletes it from list
 bool deleteData(List* list, int value);
 
 // This function prints the list
