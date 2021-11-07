@@ -139,7 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\stack\stack.c" />
+    <ClCompile Include="..\stack\stackTests.c" />
     <ClCompile Include="postfixСalculator.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\stack\stack.h" />
+    <ClInclude Include="..\stack\stackTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

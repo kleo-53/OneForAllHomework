@@ -3,100 +3,126 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "stack.h"
+#include "..\stack\stack.h"
+#include "..\stack\stackTests.h"
+
+#define ARRAY_SIZE 40
 
 bool isOperation(char symbol)
 {
-    return (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/') ? true : false;
+    return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
 }
 
-int calculator(int first, int second, char symbol)
+int doСalculation(int first, int second, char symbol)
 {
-    if (symbol == '+')
+    switch (symbol)
     {
+    case '+':
         return first + second;
-    }
-    else if (symbol == '-')
-    {
+    case '-':
         return second - first;
-    }
-    else if (symbol == '*')
-    {
+    case '*':
         return second * first;
-    }
-    else
-    {
+    case '/':
         return second / first;
+    default:
+        return second + first;
     }
 }
 
-bool testCorrectCase()
+int runMainComputationProgram(StackElement** head, char* expression)
 {
-    StackElement* head = NULL;
-    if (!isOperation('-'))
-    {
-        return false;
-    }
-    push(&head, 12);
-    push(&head, 3);
-    int first = pop(&head);
-    int second = pop(&head);
-    char symbol = '-';
-    int result = calculator(first, second, symbol);
-    if (first != 3 || second != 12 || result != 9) 
-    {
-        return false;
-    }
-    push(&head, result);
-    push(&head, -3);
-    symbol = '*';
-    first = pop(&head);
-    second = pop(&head);
-    result = calculator(first, second, symbol);
-    if (first != -3 || second != 9 || result != -27 || head != NULL)
-    {
-        return false;
-    }
-    return true;
-}
-
-int main()
-{
-    if (!testCorrectCase())
-    {
-        printf("Tests failed:(");
-        return -1;
-    }
-    StackElement* head = NULL;
-    char element[5] = "";
+    char element = ' ';
     bool continueCalculations = true;
     char ch = ' ';
+    int i = 0;
     while (continueCalculations)
     {
-        scanf_s("%[^ \n]", &element, 4);
-        scanf_s("%c", &ch, 1);
-        if (ch == '\n')
+        element = expression[i];
+        ch = expression[i + 1];
+        if (ch == '\0')
         {
             continueCalculations = false;
         }
-        if (isOperation(element[0]))
+        if (isOperation(element))
         {
-            int first = pop(&head);
-            if (!isEmpty(head))
+            if (isEmpty(*head))
             {
-                int second = pop(&head);
-                push(&head, calculator(first, second, element[0]));
+                return -1;
             }
-            else
+            int first = pop(&*head);
+            if (isEmpty(*head))
             {
-                printf("not enough variables!");
+                return -1;
+            }
+            int second = pop(&*head);
+            bool isAdded = push(&*head, doСalculation(first, second, element));
+            if (!isAdded)
+            {
+                printf("Some stack errors were occurred.");
                 return -1;
             }
         }
         else
         {
-            push(&head, atoi(&element));
+            bool isAdded = push(&*head, atoi(&element));
+            if (!isAdded)
+            {
+                printf("Some stack errors were occurred.");
+                return -1;
+            }
         }
+        i += 2;
+    }
+    return 0;
+}
+
+bool testOperations()
+{
+    return isOperation('+') && isOperation('-') && isOperation('*') && isOperation('/');
+}
+
+bool testShortCorrectCase()
+{
+    StackElement* head = NULL;
+    char expression[ARRAY_SIZE] = "1\0";
+    const int result = runMainComputationProgram(&head, expression);
+    if (result == -1)
+    {
+        return false;
+    }
+    int correctResult = 1;
+    return head->value == correctResult;
+}
+
+bool testLongCorrectCase()
+{
+    StackElement* head = NULL;
+    char expression[ARRAY_SIZE] = "1 2 6 + * 2 4 - /\0";
+    const int result = runMainComputationProgram(&head, expression);
+    if (result == -1)
+    {
+        return false;
+    }
+    int correctResult = -4;
+    return head->value == correctResult;
+}
+
+int main()
+{
+    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks() || !testOperations() || !testShortCorrectCase() || !testLongCorrectCase())
+    {
+        printf("Tests failed:(");
+        return -1;
+    }
+    StackElement* head = NULL;
+    char expression[ARRAY_SIZE] = "";
+    gets_s(expression, ARRAY_SIZE);
+    const int result = runMainComputationProgram(&head, expression);
+    if (result == -1)
+    {
+        printf("At some step there were too few variables in the stack, the program could not complete correctly :(");
+        return -1;
     }
     printf("Result of calculations is %d", head->value);
     return 0;
