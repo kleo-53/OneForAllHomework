@@ -142,8 +142,10 @@
     <ClCompile Include="moduleSort.c" />
     <ClCompile Include="myQsort.c" />
     <ClCompile Include="qsortTests.c" />
+    <ClCompile Include="frequentElement.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="frequentElement.h" />
     <ClInclude Include="myQsort.h" />
     <ClInclude Include="qsortTests.h" />
   </ItemGroup>

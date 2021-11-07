@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "myQsort.h"
 #include "qsortTests.h"
+#include "frequentElement.h"
 
 #define ARRAY_SIZE 20
 #define RANGE 11
@@ -14,7 +15,7 @@
 
 int main()
 {
-    if (!testCorrectCase())
+    if (!testCorrectCase() || !testFrequentCase())
     {
         printf("Tests failed.");
         return 1;

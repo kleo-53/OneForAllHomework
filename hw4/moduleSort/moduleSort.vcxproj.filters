@@ -24,12 +24,18 @@
     <ClCompile Include="qsortTests.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="frequentElement.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="myQsort.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="qsortTests.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="frequentElement.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
