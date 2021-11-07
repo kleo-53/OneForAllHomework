@@ -10,7 +10,7 @@ typedef struct StackElement
 } StackElement;
 
 // This function adds an element to the beginning of the stack
-void push(StackElement** head, int number);
+bool push(StackElement** head, int number);
 
 // This function deletes an element of the beginning of the stack
 int pop(StackElement** head);

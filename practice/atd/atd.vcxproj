@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4f99763e-b8f0-407b-9bea-16611eac677a}</ProjectGuid>
-    <RootNamespace>stack</RootNamespace>
+    <ProjectGuid>{a61222eb-3e92-4aa8-ba7b-80402642fb64}</ProjectGuid>
+    <RootNamespace>atd</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,15 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="mainStack.c">
-      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</TreatWarningAsError>
-    </ClCompile>
-    <ClCompile Include="stack.c" />
-    <ClCompile Include="stackTests.c" />
+    <ClCompile Include="atd.c" />
+    <ClCompile Include="list.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stack.h" />
-    <ClInclude Include="stackTests.h" />
+    <ClInclude Include="list.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

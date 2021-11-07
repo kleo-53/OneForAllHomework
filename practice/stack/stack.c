@@ -1,27 +1,30 @@
-﻿#include "stack.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
 #include <stdbool.h>
-#include <stdlib.h>
 
-#define ERROR_VALUE -10000007
+typedef struct StackElement
+{
+    int value;
+    struct StackElement* next;
+} StackElement;
 
-bool push(StackElement** head, int number)
+void push(StackElement** head, int number)
 {
     StackElement* newStackElement = calloc(1, sizeof(StackElement));
     if (newStackElement == NULL)
     {
-        return false;
+        return;
     }
     newStackElement->value = number;
     newStackElement->next = *head;
     *head = newStackElement;
-    return true;
 }
 
 int pop(StackElement** head)
 {
     if (*head == NULL)
     {
-        return ERROR_VALUE;
+        return;
     }
     StackElement* temp = *head;
     int value = temp->value;
@@ -41,4 +44,15 @@ void deleteStack(StackElement** head)
     {
         pop(head);
     }
+}
+
+int main()
+{
+    StackElement* head = NULL;
+    push(&head, 10);
+    push(&head, 15);
+    isEmpty(&head);
+    printf("%d", pop(&head));
+    printf("%d", pop(&head));
+    return 0;
 }
