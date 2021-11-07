@@ -5,6 +5,7 @@
 #include "List.h"
 
 #define ARRAY_SIZE 40
+#define ERROR_STRING "err"
 
 void moveElements(List* listFrom, List* listTo, int counter)
 {
@@ -15,33 +16,21 @@ void moveElements(List* listFrom, List* listTo, int counter)
 				}
 }
 
-List* mergeSort(List* firstList, List* secondList, int command)
+int compareHeads(List* firstList, List* secondList, int key)
+{
+				if (key == 1)
+				{
+								return (strcmp(getHeadName(firstList), getHeadName(secondList)) < 0) ? 1 : 2;
+				}
+				return (strcmp(getHeadPhone(firstList), getHeadPhone(secondList)) < 0) ? 1 : 2;
+}
+
+List* merge(List* firstList, List* secondList, int key)
 {
 				List* sortedList = createList();
 				while (!sizeOfList(firstList) == 0 && !sizeOfList(secondList) == 0)
 				{
-								if (command == 1)
-								{
-												if (strcmp(getHeadName(firstList), getHeadName(secondList)) < 0)
-												{
-																moveElements(firstList, sortedList, 1);
-												}
-												else
-												{
-																moveElements(secondList, sortedList, 1);
-												}
-								}
-								else
-								{
-												if (strcmp(getHeadPhone(firstList), getHeadPhone(secondList)) < 0)
-												{
-																moveElements(firstList, sortedList, 1);
-												}
-												else
-												{
-																moveElements(secondList, sortedList, 1);
-												}
-								}
+								compareHeads(firstList, secondList, key) == 1 ? moveElements(firstList, sortedList, 1) : moveElements(secondList, sortedList, 1);
 				}
 				if (sizeOfList(firstList) == 0)
 				{
@@ -56,7 +45,7 @@ List* mergeSort(List* firstList, List* secondList, int command)
 				return sortedList;
 }
 
-List* mainMergeSort(List** list, int command)
+List* mainMergeSort(List** list, int key)
 {
 				const int size = sizeOfList(*list);
 				if (size <= 1)
@@ -68,20 +57,100 @@ List* mainMergeSort(List** list, int command)
 				List* secondList = createList();
 				moveElements(*list, secondList, size - size / 2);
 				deleteList(*list);
-				firstList = mainMergeSort(&firstList, command);
-				secondList = mainMergeSort(&secondList, command);
-				List* resultList = mergeSort(firstList, secondList, command);
+				firstList = mainMergeSort(&firstList, key);
+				secondList = mainMergeSort(&secondList, key);
+				List* resultList = merge(firstList, secondList, key);
 				return resultList;
+}
+
+bool testAddDeleteLength()
+{
+				List* list = createList();
+				if (sizeOfList(list) != 0)
+				{
+								return false;
+				}
+				bool isAdded = addElement(list, "test", "111");
+				if (!isAdded)
+				{
+								return false;
+				}
+				isAdded = addElement(list, "qwerty", "907");
+				if (!isAdded || sizeOfList(list) != 2)
+				{
+								return false;
+				}
+				deleteHeadElement(list);
+				if (strcmp(getHeadName(list), "qwerty") != 0)
+				{
+								return false;
+				}
+				deleteList(list);
+				return true;
+}
+
+bool testWorkCase()
+{
+				List* list = createList();
+				addElement(list, "qwerty", "111");
+				addElement(list, "werty", "22345");
+				addElement(list, "abc", "90");
+				if (sizeOfList(list) != 3)
+				{
+								return false;
+				}
+				List* testListOne = mainMergeSort(&list, 1);
+				List* correctListOne = createList();
+				addElement(correctListOne, "abc", "90");
+				addElement(correctListOne, "qwerty", "111");
+				addElement(correctListOne, "werty", "22345");
+				if (sizeOfList(correctListOne) != 3)
+				{
+								return false;
+				}
+				List* list2 = createList();
+				addElement(list2, "qwerty", "111");
+				addElement(list2, "werty", "22345");
+				addElement(list2, "abc", "90");
+				List* testListTwo = mainMergeSort(&list2, 2);
+				List* correctListTwo = createList();
+				addElement(correctListTwo, "qwerty", "111");
+				addElement(correctListTwo, "werty", "22345");
+				addElement(correctListTwo, "abc", "90");
+				if (sizeOfList(correctListTwo) != 3)
+				{
+								return false;
+				}
+				for (int i = 0; i < 3; ++i)
+				{
+								if (strcmp(getHeadName(testListOne), getHeadName(correctListOne)) != 0 || strcmp(getHeadPhone(testListTwo), getHeadPhone(correctListTwo)) != 0)
+								{
+												deleteList(testListOne);
+												deleteList(testListTwo);
+												deleteList(correctListOne);
+												deleteList(correctListTwo);
+												return false;
+								}
+								deleteHeadElement(testListOne);
+								deleteHeadElement(testListTwo);
+								deleteHeadElement(correctListOne);
+								deleteHeadElement(correctListTwo);
+				}
+				return true;
 }
 
 int main()
 {
+				if (!testAddDeleteLength() || !testWorkCase())
+				{
+								printf("Tests failed:(");
+								return -1;
+				}
 				FILE* file = fopen("input.txt", "r");
 				if (file == NULL)
 				{
 								return -1;
 				}
-
 				List* list = createList();
 				while (!feof(file))
 				{
@@ -89,7 +158,12 @@ int main()
 								char phone[ARRAY_SIZE] = "";
 								fscanf_s(file, "%[^:]%*c%*c", name, 40);
 								fscanf_s(file, "%[^\n]%*c", phone, 40);
-								addElement(list, name, phone);
+								bool isAdded = addElement(list, name, phone);
+								if (!isAdded)
+								{
+												printf("some errors have occured.");
+												return -1;
+								}
 				}
 				fclose(file);
 				printf("Choose:\n1 - sort list by name\n2 - sort list by phone\n");
@@ -104,4 +178,6 @@ int main()
 				List* mergeSortList = mainMergeSort(&list, command);
 				printf("This is sorted list:\n");
 				printList(mergeSortList);
+				deleteList(mergeSortList);
+				return 0;
 }

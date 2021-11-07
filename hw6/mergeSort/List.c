@@ -1,5 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "List.h"
 #include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
 
 typedef struct ListElement
 {
@@ -34,26 +39,41 @@ int sizeOfList(List* list)
     return list->size;
 }
 
-void addElement(List* list, char* name, char* phone)
+bool addElement(List* list, char* name, char* phone)
 {
     list->size++;
     char* newName = malloc(strlen(name) + 1);
+    if (newName == NULL)
+    {
+        return false;
+    }
     char* newPhone = malloc(strlen(phone) + 1);
+    if (newPhone == NULL)
+    {
+        free(newName);
+        return false;
+    }
     strcpy(newName, name);
     strcpy(newPhone, phone);
     ListElement* newElement = malloc(sizeof(ListElement));
+    if (newElement == NULL)
+    {
+        free(newName);
+        free(newPhone);
+        return false;
+    }
     newElement->name = newName;
     newElement->phone = newPhone;
     newElement->next = NULL;
-
     if (isEmpty(list))
     {
         list->head = newElement;
         list->tail = list->head;
-        return;
+        return true;
     }
     list->tail->next = newElement;
     list->tail = list->tail->next;
+    return true;
 }
 
 void printList(List* list)
@@ -72,16 +92,17 @@ void printList(List* list)
 
 void deleteList(List* list)
 {
-    ListElement* temporary = malloc(sizeof(ListElement*));
-    while (!isEmpty(list))
+    ListElement* temporary = list->head;
+    while (temporary != NULL)
     {
-        temporary = list->head->next;
-        free(list->head->name);
-        free(list->head->phone);
-        free(list->head);
-        list->head = temporary;
+        list->head = list->head->next;
+        free(temporary->name);
+        free(temporary->phone);
+        free(temporary);
+        temporary = list->head;
     }
     free(list);
+    return;
 }
 
 char* getHeadName(List* list)

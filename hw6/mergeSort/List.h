@@ -11,7 +11,7 @@ List* createList();
 bool isEmpty(List* list);
 
 // This function adds element to the list
-void addElement(List* list, char* name, char* phone);
+bool addElement(List* list, char* name, char* phone);
 
 // This function prints the list
 void printList(List* list);
