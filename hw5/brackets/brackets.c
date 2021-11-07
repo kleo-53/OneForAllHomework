@@ -7,6 +7,7 @@
 #include "../stack/stackTests.h"
 
 #define ARRAY_SIZE 40
+
 bool smartAddElement(StackElement** stack, char element)
 {
     if (element == '(' || element == '[' || element == '{')
