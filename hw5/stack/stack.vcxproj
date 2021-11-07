@@ -139,6 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="mainStack.c">
+      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</TreatWarningAsError>
+    </ClCompile>
     <ClCompile Include="stack.c" />
     <ClCompile Include="stackTests.c" />
   </ItemGroup>
