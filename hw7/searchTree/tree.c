@@ -222,15 +222,3 @@ void deleteTree(Tree* tree)
     free(tree);
     return;
 }
-/*
-int main()
-{
-    Node* ourTree = createTree();
-    ourTree = addNode(ourTree, 1);
-    ourTree = addNode(ourTree, 2);
-    ourTree = addNode(ourTree, 3);
-    ourTree = addNode(ourTree, 4);
-    bool twoInTree = inTree(&ourTree, 2);
-    bool fiveInTree = inTree(&ourTree, 5);
-    deleteTree(&ourTree);
-}*/
