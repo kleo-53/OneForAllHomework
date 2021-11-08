@@ -28,10 +28,15 @@ int menu(Tree** tree)
         printf("Enter value: ");
         char value[ARRAY_SIZE] = "";
         scanf_s("%s", &value, ARRAY_SIZE);
-        addValue(*tree, key, value);
+        bool isWork = true;
+        addValue(*tree, key, value, isWork);
         scanf_s("%*c");
         printf("\n");
-        return true;
+        if (!isWork)
+        {
+            printf("Some errors have occured");
+        }
+        return isWork;
     }
     case '2':
     {
@@ -53,8 +58,13 @@ int menu(Tree** tree)
     {
         printf("Enter key: ");
         scanf_s("%d", &key);
-        deleteValue(*tree, key);
-        return true;
+        bool isWork = true;
+        deleteValue(*tree, key, isWork);
+        if (!isWork)
+        {
+            printf("Some errors have occured");
+        }
+        return isWork;
     }
     default:
         printf("Invalid command\n");
@@ -70,32 +80,33 @@ bool testCase()
         deleteTree(tree);
         return false;
     }
-    addValue(tree, 100, "root");
-    addValue(tree, 50, "rootLSon");
-    addValue(tree, 150, "rootRSon");
-    addValue(tree, 25, "LLSon");
-    addValue(tree, 75, "LRSon");
-    addValue(tree, 120, "RLSon");
-    addValue(tree, 250, "RRSon");
-    addValue(tree, 111, "RLL");
-    addValue(tree, 101, "root");
-    if (!inTree(tree, 120) || inTree(tree, 1) || strcmp("rootRSon", getValue(tree, 150)) != 0)
+    bool isWork = true;
+    addValue(tree, 100, "root", isWork);
+    addValue(tree, 50, "rootLSon", isWork);
+    addValue(tree, 150, "rootRSon", isWork);
+    addValue(tree, 25, "LLSon", isWork);
+    addValue(tree, 75, "LRSon", isWork);
+    addValue(tree, 120, "RLSon", isWork);
+    addValue(tree, 250, "RRSon", isWork);
+    addValue(tree, 111, "RLL", isWork);
+    addValue(tree, 101, "root", isWork);
+    if (!isWork || !inTree(tree, 120) || inTree(tree, 1) || strcmp("rootRSon", getValue(tree, 150)) != 0)
     {
         deleteTree(tree);
         return false;
     }
-    addValue(tree, 101, "RLLL");
-    if (strcmp("RLLL", getValue(tree, 101)) != 0 || !inTree(tree, 101))
+    addValue(tree, 101, "RLLL", isWork);
+    if (!isWork || strcmp("RLLL", getValue(tree, 101)) != 0 || !inTree(tree, 101) || strcmp(getValue(tree, 1023), "err") != 0)
     {
         deleteTree(tree);
         return false;
     }
-    deleteValue(tree, 101);
-    deleteValue(tree, 120);
-    deleteValue(tree, 50);
-    deleteValue(tree, 100);
-    deleteValue(tree, 150);
-    if (inTree(tree, 120) || !inTree(tree, 111) || !inTree(tree, 75) || inTree(tree, 100) || !inTree(tree, 25) || !inTree(tree, 250) || inTree(tree, 50))
+    deleteValue(tree, 101, isWork);
+    deleteValue(tree, 120, isWork);
+    deleteValue(tree, 50, isWork);
+    deleteValue(tree, 100, isWork);
+    deleteValue(tree, 150, isWork);
+    if (!isWork || inTree(tree, 120) || !inTree(tree, 111) || !inTree(tree, 75) || inTree(tree, 100) || !inTree(tree, 25) || !inTree(tree, 250) || inTree(tree, 50))
     {
         deleteTree(tree);
         return false;
