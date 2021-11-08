@@ -1,12 +1,14 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct Node
 {
     struct Node* leftSon;
     struct Node* rightSon;
-    struct Node* parent;
     int key;
     char* value;
 } Node;
@@ -28,9 +30,11 @@ bool isEmpty(Tree* tree)
 
 void addValueRecursive(Node* node, int key, char* value)
 {
+    char* strValue = calloc(strlen(value) + 1, sizeof(char));
+    strcpy(strValue, value);
     if (node->key == key)
     {
-        node->value = value;
+        node->value = strValue;
         return;
     }
     if (node->key > key)
@@ -39,23 +43,21 @@ void addValueRecursive(Node* node, int key, char* value)
         {
             node->leftSon = calloc(sizeof(Node), 1);
             node->leftSon->key = key;
-            node->leftSon->value = value;
-            node->leftSon->parent = node;
+            node->leftSon->value = strValue;
             return;
         }
         addValueRecursive(node->leftSon, key, value);
-        if (node->key < key)
+    }
+    if (node->key < key)
+    {
+        if (node->rightSon == NULL)
         {
-            if (node->rightSon == NULL)
-            {
-                node->rightSon = calloc(sizeof(Node), 1);
-                node->rightSon->key = key;
-                node->rightSon->value = value;
-                node->rightSon->parent = node;
-                return;
-            }
-            addValueRecursive(node->rightSon, key, value);
+            node->rightSon = calloc(sizeof(Node), 1);
+            node->rightSon->key = key;
+            node->rightSon->value = strValue;
+            return;
         }
+        addValueRecursive(node->rightSon, key, strValue);
     }
 }
 
@@ -66,9 +68,11 @@ void addValue(Tree* tree, int key, char* value)
         addValueRecursive(tree->root, key, value);
         return;
     }
+    char* strValue = calloc(strlen(value) + 1, sizeof(char));
+    strcpy(strValue, value);
     tree->root = calloc(sizeof(Node), 1);
     tree->root->key = key;
-    tree->root->value = value;
+    tree->root->value = strValue;
     return;
 }
 
@@ -117,51 +121,59 @@ char* getValue(Tree* tree, int key)
 
 Node* subsequentNode(Node* node)
 {
-    Node* left = node->leftSon;
-    while (left->rightSon != NULL)
+    Node* right = node->rightSon;
+    while (right->leftSon != NULL)
     {
-        left = left->rightSon;
+        right = right->leftSon;
     }
-    return left;
+    return right;
 }
 
-void deleteNode(Node* node, int key)
+Node* deleteNode(Node* node, int key)
 {
     if (node == NULL)
     {
-        return;
+        return NULL;
     }
     if (node->key == key)
     {
-        if (node->leftSon == NULL || node->rightSon == NULL)
+        if (node->leftSon == NULL && node->rightSon == NULL)
+        {
+            free(node);
+            return NULL;
+        }
+        else if (node->leftSon == NULL || node->rightSon == NULL)
         {
             Node* child = (node->leftSon != NULL ? node->leftSon : node->rightSon);
-            free(node->value);
             free(node);
             node = child;
+            return node;
         }
         else
         {
             Node* subsequent = subsequentNode(node);
             node->key = subsequent->key;
             node->value = subsequent->value;
-            deleteNode(node->rightSon, subsequent->key);
+            node->rightSon = deleteNode(node->rightSon, node->rightSon->key);
         }
-        return;
+        return node;
     }
     if (node->key > key)
     {
-        deleteNode(node->rightSon, key);
+        node->leftSon = deleteNode(node->leftSon, key);
+        return node;
     }
     else
     {
-        deleteNode(node->leftSon, key);
+        node->rightSon = deleteNode(node->rightSon, key);
+        return node;
     }
 }
 
 void deleteValue(Tree* tree, int key)
 {
-    deleteNode(tree->root, key);
+    tree->root = deleteNode(tree->root, key);
+    return;
 }
 
 void deleteChildren(Node* node)
