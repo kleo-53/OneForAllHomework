@@ -184,7 +184,6 @@ void deleteChildren(Node* node)
     }
     deleteChildren(node->leftSon);
     deleteChildren(node->rightSon);
-    free(node->value);
     free(node);
 }
 

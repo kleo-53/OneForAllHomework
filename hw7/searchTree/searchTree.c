@@ -79,13 +79,13 @@ bool testCase()
     addValue(tree, 250, "RRSon");
     addValue(tree, 111, "RLL");
     addValue(tree, 101, "root");
-    if (!inTree(tree, 120) || inTree(tree, 1) || strcmp("rootRSon", getValue(tree, 150) != 0))
+    if (!inTree(tree, 120) || inTree(tree, 1) || strcmp("rootRSon", getValue(tree, 150)) != 0)
     {
         deleteTree(tree);
         return false;
     }
     addValue(tree, 101, "RLLL");
-    if (strcmp("RLLL", getValue(tree, 101) != 0) || !inTree(tree, 101))
+    if (strcmp("RLLL", getValue(tree, 101)) != 0 || !inTree(tree, 101))
     {
         deleteTree(tree);
         return false;
