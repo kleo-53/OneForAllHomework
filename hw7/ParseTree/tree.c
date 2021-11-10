@@ -68,6 +68,7 @@ Node* addNodeRecursive(char* givenString, int index, bool isWork)
     {
         newNode->operand = numberConvert(givenString, index);
     }
+    return newNode;
 }
 
 Tree* createAndAdd(char* givenString, bool isWork)
