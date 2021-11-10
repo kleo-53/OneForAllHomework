@@ -40,9 +40,9 @@ bool isOperation(char symbol)
     return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
 }
 
-Node* addNodeRecursive(char* givenString, int* index, bool isWork)
+Node* addNodeRecursive(char* givenString, int* index, bool* isWork)
 {
-    if (!isWork)
+    if (!(*isWork))
     {
         return NULL;
     }
@@ -55,7 +55,7 @@ Node* addNodeRecursive(char* givenString, int* index, bool isWork)
     Node* newNode = calloc(1, sizeof(Node));
     if (newNode == NULL)
     {
-        isWork = false;
+        *isWork = false;
         return NULL;
     }
     if (isOperation(givenString[*index]))
@@ -71,16 +71,16 @@ Node* addNodeRecursive(char* givenString, int* index, bool isWork)
     return newNode;
 }
 
-Tree* createAndAdd(char* givenString, bool isWork)
+Tree* createAndAdd(char* givenString, bool* isWork)
 {
     Tree* tree = calloc(1, sizeof(Tree));
     if (tree == NULL)
     {
-        isWork = false;
+        *isWork = false;
         return NULL;
     }
     int index = -1;
-    tree->root = addNodeRecursive(givenString, &index, isWork);
+    tree->root = addNodeRecursive(givenString, &index, &isWork);
     return tree;
 }
 
