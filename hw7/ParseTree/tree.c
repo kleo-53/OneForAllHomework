@@ -24,13 +24,13 @@ bool isEmpty(Tree* tree)
     return tree->root == NULL;
 }
 
-int numberConvert(char* givenString, int index)
+int numberConvert(char* givenString, int* index)
 {
     int number = 0;
-    while (givenString[index] >= '0' && givenString[index] <= '9')
+    while (givenString[*index] >= '0' && givenString[*index] <= '9')
     {
-        number = number * 10 + (int)(givenString[index] - '0');
-        index++;
+        number = number * 10 + (int)(givenString[*index] - '0');
+        ++(*index);
     }
     return number;
 }
@@ -40,17 +40,17 @@ bool isOperation(char symbol)
     return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
 }
 
-Node* addNodeRecursive(char* givenString, int index, bool isWork)
+Node* addNodeRecursive(char* givenString, int* index, bool isWork)
 {
     if (!isWork)
     {
         return NULL;
     }
     int stringSize = strlen(givenString);
-    ++index;
-    while (index != stringSize && (givenString[index] == ' ' || givenString[index] == '(' || givenString[index] == ')'))
+    ++(*index);
+    while (*index != stringSize && (givenString[*index] == ' ' || givenString[*index] == '(' || givenString[*index] == ')'))
     {
-        ++index;
+        ++(*index);
     }
     Node* newNode = calloc(1, sizeof(Node));
     if (newNode == NULL)
@@ -58,9 +58,9 @@ Node* addNodeRecursive(char* givenString, int index, bool isWork)
         isWork = false;
         return NULL;
     }
-    if (isOperation(givenString[index]))
+    if (isOperation(givenString[*index]))
     {
-        newNode->operation = givenString[index];
+        newNode->operation = givenString[*index];
         newNode->leftSon = addNodeRecursive(givenString, index, isWork);
         newNode->rightSon = addNodeRecursive(givenString, index, isWork);
     }
@@ -80,7 +80,7 @@ Tree* createAndAdd(char* givenString, bool isWork)
         return NULL;
     }
     int index = -1;
-    tree->root = addNodeRecursive(givenString, index, isWork);
+    tree->root = addNodeRecursive(givenString, &index, isWork);
     return tree;
 }
 
@@ -117,9 +117,11 @@ void printRecursive(Node* node)
         printf("%d", node->operand);
         return;
     }
-    printf("%c", node->operation);
+    printf("( %c ", node->operation);
     printRecursive(node->leftSon);
+    printf(" ");
     printRecursive(node->rightSon);
+    printf(" )");
     return;
 }
 
