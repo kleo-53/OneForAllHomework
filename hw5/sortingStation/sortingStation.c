@@ -8,12 +8,11 @@
 #include "../stack/stackTests.h"
 
 #define ARRAY_SIZE 40
-#define ERROR_VALUE -10000007
 #define ERROR_STRING "err"
 
 bool isBracket(char element)
 {
-    return element == '(' || element == ')' || element == '[' || element == ']' || element == '{' || element == '}';
+    return element == '(' || element == ')';
 }
 
 bool isOperation(char element)
@@ -35,16 +34,17 @@ int givePriority(char operation)
     return operation == '(' ? 0 : 2;
 }
 
-char* menu(char* givenString, int strSize)
+char* menu(char* givenString)
 {
     StackElement* head = NULL;
-    char element = ' ';
     int newIndex = 0;
     int givenIndex = 0;
     char resultString[ARRAY_SIZE] = "";
+    bool isWorks = true;
+    int strSize = strlen(givenString);
     while (givenIndex != strSize)
     {
-        element = givenString[givenIndex];
+        char element = givenString[givenIndex];
         if (isDigit(element))
         {
             resultString[newIndex] = element;
@@ -54,8 +54,8 @@ char* menu(char* givenString, int strSize)
         {
             while (!isEmpty(head))
             {
-                char topElement = pop(&head);
-                if (topElement == ERROR_VALUE)
+                char topElement = pop(&head, &isWorks);
+                if (!isWorks)
                 {
                     return ERROR_STRING;
                 }
@@ -92,8 +92,8 @@ char* menu(char* givenString, int strSize)
         {
             while (!isEmpty(head))
             {
-                char topElement = pop(&head);
-                if (topElement == ERROR_VALUE)
+                char topElement = pop(&head, &isWorks);
+                if (!isWorks)
                 {
                     return ERROR_STRING;
                 }
@@ -112,8 +112,8 @@ char* menu(char* givenString, int strSize)
     }
     while (!isEmpty(head))
     {
-        resultString[newIndex] = pop(&head);
-        if (resultString[newIndex] == ERROR_VALUE)
+        resultString[newIndex] = pop(&head, &isWorks);
+        if (!isWorks)
         {
             return ERROR_STRING;
         }
@@ -122,18 +122,36 @@ char* menu(char* givenString, int strSize)
     return resultString;
 }
 
-bool testCase()
+bool testCorrectCase()
 {
     char inputString[ARRAY_SIZE] = "(1 + 1)*2";
     char resultString[ARRAY_SIZE] = "";
     const char correctString[ARRAY_SIZE] = "11+2*";
-    strcat(resultString, menu(inputString, 10));
+    strcat(resultString, menu(inputString));
+    return !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
+}
+
+bool testEmptyCase()
+{
+    char inputString[ARRAY_SIZE] = "()";
+    char resultString[ARRAY_SIZE] = "";
+    const char correctString[ARRAY_SIZE] = "";
+    strcat(resultString, menu(inputString));
+    return !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
+}
+
+bool testLongCase()
+{
+    char inputString[ARRAY_SIZE] = "1 + 3 *(7+2)/4";
+    char resultString[ARRAY_SIZE] = "";
+    const char correctString[ARRAY_SIZE] = "1372+*4/+";
+    strcat(resultString, menu(inputString));
     return !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
 }
 
 int main()
 {
-    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks() || !testCase())
+    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks() || !testCorrectCase() || !testEmptyCase() || !testLongCase())
     {
         printf("Tests failed:(");
         return -1;
@@ -142,27 +160,15 @@ int main()
     bool continueWork = true;
     char inputString[40] = "";
     int index = 0;
-    while (continueWork)
-    {
-        scanf_s("%c", &element, 1);
-        if (element == '\n')
-        {
-            continueWork = false;
-        }
-        else
-        {
-            inputString[index] = element;
-            ++index;
-        }
-    }
-    char resultString[40] = "";
-    strcat(resultString, menu(inputString, index));
+    scanf_s("%[^\n]s", &inputString, ARRAY_SIZE);
+    char resultString[ARRAY_SIZE] = "";
+    strcat(resultString, menu(inputString));
     if (resultString == ERROR_STRING)
     {
         printf("Some errors have occured.");
         return -1;
     }
-    for (int i = 0; i < strlen(resultString); ++i)
+    for (int i = 0; i < (int)strlen(resultString); ++i)
     {
         printf("%c ", resultString[i]);
     }
