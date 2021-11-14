@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../stack/stack.h"
 #include "../stack/stackTests.h"
 
@@ -19,8 +20,9 @@ bool smartAddElement(StackElement** stack, char element)
     {
         return false;
     }
-    char popElement = pop(stack);
-    if ((popElement == '{' && element == '}') || (popElement == '[' && element == ']') || (popElement == '(' && element == ')'))
+    bool isWorks = true;
+    char popElement = pop(stack, &isWorks);
+    if (isWorks & (popElement == '{' && element == '}') || (popElement == '[' && element == ']') || (popElement == '(' && element == ')'))
     {
         return true;
     }
@@ -29,8 +31,7 @@ bool smartAddElement(StackElement** stack, char element)
     {
         return false;
     }
-    isAdded = push(stack, element);
-    return isAdded;
+    return push(stack, element);
 }
 
 bool isBracket(char element)
@@ -38,12 +39,14 @@ bool isBracket(char element)
     return element == '(' || element == ')' || element == '[' || element == ']' || element == '{' || element == '}';
 }
 
-bool menu(char* givenString, int stringSize)
+bool isSequenceCorrect(const char* givenString)
 {
     StackElement* head = NULL;
     char element = ' ';
     bool continueWork = true;
+    bool isWorks = true;
     int i = 0;
+    int stringSize = strlen(givenString);
     while (i != stringSize)
     {
         element = givenString[i];
@@ -52,24 +55,28 @@ bool menu(char* givenString, int stringSize)
             bool isCorrect = smartAddElement(&head, element);
             if (!isCorrect)
             {
+                deleteStack(&head, &isWorks);
                 return false;
             }
         }
-        i += 1;
+        ++i;
     }
-    return isEmpty(head);
+    bool result = isEmpty(head);
+    deleteStack(&head, &isWorks);
+    return result;
 }
 
 bool testIncorrectCase()
 {
     char testString[5] = "({)}";
-    return !menu(testString, 4);
+    char testString2[3] = ")(";
+    return !isSequenceCorrect(testString) && !isSequenceCorrect(testString2);
 }
 
 bool testCorrectCase()
 {
     char testString[17] = "({})[]((([]){}))";
-    return menu(testString, 16);
+    return isSequenceCorrect(testString);
 }
 
 int main()
@@ -83,17 +90,8 @@ int main()
     int stringSize = 0;
     char inputString[ARRAY_SIZE] = { " " };
     bool continueWork = true;
-    while (continueWork)
-    {
-        scanf_s("%c", &element, 1);
-        if (element == '\n')
-        {
-            continueWork = false;
-        }
-        inputString[stringSize] = element;
-        stringSize += 1;
-    }
-    if (menu(inputString, stringSize))
+    scanf_s("%[^\n]s", &inputString, ARRAY_SIZE);
+    if (isSequenceCorrect(inputString))
     {
         printf("This sequence is correct.");
     }
