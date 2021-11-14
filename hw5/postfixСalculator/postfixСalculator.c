@@ -48,23 +48,23 @@ int runMainComputationProgram(char* expression, bool* isWorks)
             if (isEmpty(head))
             {
                 *isWorks = false;
-                deleteStack(&head, &isWorks);
+                deleteStack(&head, isWorks);
                 return -1;
             }
-            int first = pop(&head, &isWorks);
+            int first = pop(&head, isWorks);
             if (isEmpty(head) || !isWorks)
             {
                 *isWorks = false;
-                deleteStack(&head, &isWorks);
+                deleteStack(&head, isWorks);
                 return -1;
             }
-            int second = pop(&head, &isWorks);
+            int second = pop(&head, isWorks);
             bool isAdded = push(&head, doСalculation(first, second, element));
             if (!isAdded || !isWorks)
             {
                 printf("Some stack errors were occurred.");
                 *isWorks = false;
-                deleteStack(&head, &isWorks);
+                deleteStack(&head, isWorks);
                 return -1;
             }
         }
@@ -75,7 +75,7 @@ int runMainComputationProgram(char* expression, bool* isWorks)
             {
                 printf("Some stack errors were occurred.");
                 *isWorks = false;
-                deleteStack(&head, &isWorks);
+                deleteStack(&head, isWorks);
                 return -1;
             }
         }
@@ -84,10 +84,10 @@ int runMainComputationProgram(char* expression, bool* isWorks)
     if (head != NULL && head->next == NULL)
     {
         int result = head->value;
-        deleteStack(&head, &isWorks);
+        deleteStack(&head, isWorks);
         return isWorks ? result : -1;
     }
-    deleteStack(&head, &isWorks);
+    deleteStack(&head, isWorks);
     *isWorks = false;
     return -1;
 }
