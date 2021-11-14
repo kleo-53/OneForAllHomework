@@ -13,28 +13,35 @@ bool testAddDeleteLengthFunctions()
     bool isAdded = addElement(10, list);
     if (!isAdded)
     {
+        deleteList(list);
         return false;
     }
     isAdded = addElement(15, list);
     if (!isAdded)
     {
+        deleteList(list);
         return false;
     }
     if (getRemaining(list) != 10)
     {
+        deleteList(list);
         return false;
     }
     if (getLength(list) != 2)
     {
+        deleteList(list);
         return false;
     }
     deleteElement(list);
     if (getLength(list) != 1)
     {
+        deleteList(list);
         return false;
     }
     deleteElement(list);
-    return getLength(list) == 0;
+    bool result = getLength(list) == 0;
+    deleteList(list);
+    return result;
 }
 
 bool testPassFunction()
@@ -43,33 +50,38 @@ bool testPassFunction()
     bool isAdded = addElement(10, list);
     if (!isAdded)
     {
+        deleteList(list);
         return false;
     }
     isAdded = addElement(15, list);
     if (!isAdded)
     {
+        deleteList(list);
         return false;
     }
     if (getRemaining(list) != 10)
     {
+        deleteList(list);
         return false;
     }
     passElement(list);
     if (getRemaining(list) != 15)
     {
+        deleteList(list);
         return false;
     }
     deleteElement(list);
     passElement(list);
     if (getRemaining(list) != 10)
     {
+        deleteList(list);
         return false;
     }
-    deleteElement(list);
+    deleteList(list);
     return true;
 }
 
-int execution(int countOfWarriors, int frequency)
+int doExecution(int countOfWarriors, int frequency)
 {
     List* warriorsList = createList();
     for (int i = 1; i < countOfWarriors + 1; ++i)
@@ -77,6 +89,7 @@ int execution(int countOfWarriors, int frequency)
         bool isAdded = addElement(i, warriorsList);
         if (!isAdded)
         {
+            deleteList(warriorsList);
             return ERROR_VALUE;
         }
     }
@@ -91,23 +104,40 @@ int execution(int countOfWarriors, int frequency)
     int result = getRemaining(warriorsList);
     if (result == -1)
     {
+        deleteList(warriorsList);
         return ERROR_VALUE;
     }
-    deleteElement(warriorsList);
+    deleteList(warriorsList);
     return result;
 }
 
-bool testWork()
+bool testWorkSix()
 {
-    int countOfWarriors = 6;
-    int frequency = 3;
     List* warriorsList = createList();
-    return execution(countOfWarriors, frequency) == 1;
+    int result = doExecution(6, 3);
+    deleteList(warriorsList);
+    return result == 1 ? true : false;
+}
+
+bool testWorkOne()
+{
+    List* warriorsList = createList();
+    int result = doExecution(1, 10);
+    deleteList(warriorsList);
+    return result == 1 ? true : false;
+}
+
+bool testWorkMany()
+{
+    List* warriorsList = createList();
+    int result = doExecution(19, 31);
+    deleteList(warriorsList);
+    return result == 18 ? true : false;
 }
 
 int main()
 {
-    if (!testAddDeleteLengthFunctions() || !testPassFunction() || !testWork())
+    if (!testAddDeleteLengthFunctions() || !testPassFunction() || !testWorkSix() || !testWorkOne() || !testWorkMany())
     {
         printf("Tests failed:(");
         return -1;
@@ -118,7 +148,7 @@ int main()
     printf("Enter the frequency of killing warriors: ");
     int frequency = 0;
     scanf_s("%d", &frequency);
-    int result = execution(countOfWarriors, frequency);
-    printf("The warrior numbered %d will survive!", result);
+    const int result = doExecution(countOfWarriors, frequency);
+    printf(result == ERROR_VALUE ? "Some errors were occured" : "The warrior numbered %d will survive!", result);
     return 0;
 }

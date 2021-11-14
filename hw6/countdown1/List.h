@@ -22,3 +22,6 @@ int getRemaining(List* list);
 
 // This function gives the length of list
 int getLength(List* list);
+
+// This function deletes list
+void deleteList(List* list);

@@ -89,3 +89,14 @@ int getLength(List* list)
 {
     return list->length;
 }
+
+void deleteList(List* list)
+{
+    while (list->length != 0)
+    {
+        deleteElement(list);
+    }
+    free(list->head);
+    free(list);
+    return;
+}
