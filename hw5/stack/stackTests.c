@@ -26,7 +26,7 @@ bool testStackWorks()
         return false;
     }
     popValue = pop(&stack, &isWorks);
-    if (!isWorks || popValue != 10 || stack != NULL) 
+    if (!isWorks || popValue != 10 || stack != NULL)
     {
         deleteStack(&stack, &isDeleted);
         return false;
