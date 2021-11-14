@@ -2,52 +2,56 @@
 #include "stackTests.h"
 #include <stdio.h>
 
-#define ERROR_VALUE -10000007
-
 bool testStackWorks()
 {
     StackElement* stack = NULL;
     bool isAdded = push(&stack, 10);
+    bool isDeleted = true;
     if (!isAdded || stack->value != 10)
     {
-        deleteStack(&stack);
+        deleteStack(&stack, &isDeleted);
         return false;
     }
     isAdded = push(&stack, 11);
     if (!isAdded || stack->value != 11)
     {
-        deleteStack(&stack);
+        deleteStack(&stack, &isDeleted);
         return false;
     }
-    int popValue = pop(&stack);
-    if (popValue != 11 || stack->value != 10)
+    bool isWorks = true;
+    int popValue = pop(&stack, &isWorks);
+    if (!isWorks || popValue != 11 || stack->value != 10)
     {
-        deleteStack(&stack);
+        deleteStack(&stack, &isDeleted);
         return false;
     }
-    popValue = pop(&stack);
-    if (popValue == 10 && stack == NULL) 
+    popValue = pop(&stack, &isWorks);
+    if (!isWorks || popValue != 10 || stack != NULL) 
     {
-        return true;
+        deleteStack(&stack, &isDeleted);
+        return false;
     }
-    deleteStack(&stack);
-    return false;
+    deleteStack(&stack, &isDeleted);
+    return true;
 }
 
 bool testPopEmptyStack()
 {
     StackElement* stack = NULL;
-    const int popValue = pop(&stack);
-    deleteStack(&stack);
-    return popValue == ERROR_VALUE;
+    bool isWorks = true;
+    bool isDeleted = true;
+    const int popValue = pop(&stack, &isWorks);
+    deleteStack(&stack, &isDeleted);
+    return !isWorks && isDeleted ? true : false;
 }
 
 bool testIsEmpty()
 {
     StackElement* stack = NULL;
+    bool isDeleted = true;
     if (!isEmpty(stack))
     {
-        deleteStack(&stack);
+        deleteStack(&stack, &isDeleted);
         return false;
     }
     bool isAdded = push(&stack, 10);
@@ -55,6 +59,6 @@ bool testIsEmpty()
     {
         return false;
     }
-    deleteStack(&stack);
+    deleteStack(&stack, &isDeleted);
     return true;
 }
