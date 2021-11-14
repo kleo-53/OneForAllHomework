@@ -34,13 +34,11 @@ int givePriority(char operation)
     return operation == '(' ? 0 : 2;
 }
 
-char* menu(char* givenString)
+void doSorting(const char* givenString, char* resultString, bool* isWorks)
 {
     StackElement* head = NULL;
     int newIndex = 0;
     int givenIndex = 0;
-    char resultString[ARRAY_SIZE] = "";
-    bool isWorks = true;
     int strSize = strlen(givenString);
     while (givenIndex != strSize)
     {
@@ -54,17 +52,20 @@ char* menu(char* givenString)
         {
             while (!isEmpty(head))
             {
-                char topElement = pop(&head, &isWorks);
+                char topElement = pop(&head, isWorks);
                 if (!isWorks)
                 {
-                    return ERROR_STRING;
+                    deleteStack(&head, isWorks);
+                    return;
                 }
                 if (givePriority(topElement) < givePriority(element))
                 {
                     bool isAdded = push(&head, topElement);
                     if (!isAdded)
                     {
-                        return ERROR_STRING;
+                        deleteStack(&head, isWorks);
+                        isWorks = false;
+                        return;
                     }
                     break;
                 }
@@ -77,7 +78,9 @@ char* menu(char* givenString)
             bool isAdded = push(&head, element);
             if (!isAdded)
             {
-                return ERROR_STRING;
+                deleteStack(&head, isWorks);
+                isWorks = false;
+                return;
             }
         }
         else if (element == '(')
@@ -85,17 +88,20 @@ char* menu(char* givenString)
             bool isAdded = push(&head, element);
             if (!isAdded)
             {
-                return ERROR_STRING;
+                deleteStack(&head, isWorks);
+                isWorks = false;
+                return;
             }
         }
         else if (element == ')')
         {
             while (!isEmpty(head))
             {
-                char topElement = pop(&head, &isWorks);
+                char topElement = pop(&head, isWorks);
                 if (!isWorks)
                 {
-                    return ERROR_STRING;
+                    deleteStack(&head, isWorks);
+                    return;
                 }
                 if (topElement == '(')
                 {
@@ -112,41 +118,46 @@ char* menu(char* givenString)
     }
     while (!isEmpty(head))
     {
-        resultString[newIndex] = pop(&head, &isWorks);
+        resultString[newIndex] = pop(&head, isWorks);
         if (!isWorks)
         {
-            return ERROR_STRING;
+            deleteStack(&head, isWorks);
+            return;
         }
         ++newIndex;
     }
-    return resultString;
+    deleteStack(&head, isWorks);
+    return;
 }
 
 bool testCorrectCase()
 {
-    char inputString[ARRAY_SIZE] = "(1 + 1)*2";
+    const char inputString[ARRAY_SIZE] = "(1 + 1)*2";
     char resultString[ARRAY_SIZE] = "";
-    const char correctString[ARRAY_SIZE] = "11+2*";
-    strcat(resultString, menu(inputString));
-    return !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
+    const char* correctString = { "11+2*" };
+    bool isWorks = true;
+    doSorting(inputString, resultString, &isWorks);
+    return isWorks && !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
 }
 
 bool testEmptyCase()
 {
-    char inputString[ARRAY_SIZE] = "()";
+    const char inputString[ARRAY_SIZE] = "()";
     char resultString[ARRAY_SIZE] = "";
-    const char correctString[ARRAY_SIZE] = "";
-    strcat(resultString, menu(inputString));
-    return !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
+    const char* correctString = { "" };
+    bool isWorks = true;
+    doSorting(inputString, resultString, &isWorks);
+    return isWorks && !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
 }
 
 bool testLongCase()
 {
-    char inputString[ARRAY_SIZE] = "1 + 3 *(7+2)/4";
+    const char inputString[ARRAY_SIZE] = "1 + 3 *(7+2)/4";
     char resultString[ARRAY_SIZE] = "";
-    const char correctString[ARRAY_SIZE] = "1372+*4/+";
-    strcat(resultString, menu(inputString));
-    return !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
+    const char* correctString = { "1372+*4/+" };
+    bool isWorks = true;
+    doSorting(inputString, resultString, &isWorks);
+    return isWorks && !(resultString == ERROR_STRING) && strcmp(resultString, correctString) == 0;
 }
 
 int main()
@@ -156,18 +167,18 @@ int main()
         printf("Tests failed:(");
         return -1;
     }
-    char element = ' ';
-    bool continueWork = true;
     char inputString[40] = "";
-    int index = 0;
+    printf("Enter arithmetic expression in infix form:\n");
     scanf_s("%[^\n]s", &inputString, ARRAY_SIZE);
     char resultString[ARRAY_SIZE] = "";
-    strcat(resultString, menu(inputString));
-    if (resultString == ERROR_STRING)
+    bool isWorks = true;
+    doSorting(inputString, resultString, &isWorks);
+    if (!isWorks)
     {
-        printf("Some errors have occured.");
+        printf("\nSome errors have occured.");
         return -1;
     }
+    printf("\nThis arithmetic expression in postfix form:\n");
     for (int i = 0; i < (int)strlen(resultString); ++i)
     {
         printf("%c ", resultString[i]);
