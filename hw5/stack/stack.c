@@ -2,8 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define ERROR_VALUE -10000007
-
 bool push(StackElement** head, int number)
 {
     StackElement* newStackElement = calloc(1, sizeof(StackElement));
@@ -17,11 +15,12 @@ bool push(StackElement** head, int number)
     return true;
 }
 
-int pop(StackElement** head)
+int pop(StackElement** head, bool* isDeleted)
 {
     if (*head == NULL)
     {
-        return ERROR_VALUE;
+        *isDeleted = false;
+        return -1;
     }
     StackElement* temp = *head;
     int value = temp->value;
@@ -35,10 +34,10 @@ bool isEmpty(StackElement* head)
     return head == NULL;
 }
 
-void deleteStack(StackElement** head)
+void deleteStack(StackElement** head, bool* isDeleted)
 {
     while (!isEmpty(*head))
     {
-        pop(head);
+        pop(head, isDeleted);
     }
 }
