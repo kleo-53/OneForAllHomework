@@ -30,100 +30,102 @@ int doСalculation(int first, int second, char symbol)
     }
 }
 
-int runMainComputationProgram(StackElement** head, char* expression)
+int runMainComputationProgram(char* expression, bool* isWorks)
 {
-    char element = ' ';
+    StackElement* head = NULL;
     bool continueCalculations = true;
-    char ch = ' ';
     int i = 0;
     while (continueCalculations)
     {
-        element = expression[i];
-        ch = expression[i + 1];
+        const char element = expression[i];
+        const char ch = expression[i + 1];
         if (ch == '\0')
         {
             continueCalculations = false;
         }
         if (isOperation(element))
         {
-            if (isEmpty(*head))
+            if (isEmpty(head))
             {
+                *isWorks = false;
+                deleteStack(&head, &isWorks);
                 return -1;
             }
-            int first = pop(&*head);
-            if (isEmpty(*head))
+            int first = pop(&head, &isWorks);
+            if (isEmpty(head) || !isWorks)
             {
+                *isWorks = false;
+                deleteStack(&head, &isWorks);
                 return -1;
             }
-            int second = pop(&*head);
-            bool isAdded = push(&*head, doСalculation(first, second, element));
-            if (!isAdded)
+            int second = pop(&head, &isWorks);
+            bool isAdded = push(&head, doСalculation(first, second, element));
+            if (!isAdded || !isWorks)
             {
                 printf("Some stack errors were occurred.");
+                *isWorks = false;
+                deleteStack(&head, &isWorks);
                 return -1;
             }
         }
         else
         {
-            bool isAdded = push(&*head, atoi(&element));
+            bool isAdded = push(&head, atoi(&element));
             if (!isAdded)
             {
                 printf("Some stack errors were occurred.");
+                *isWorks = false;
+                deleteStack(&head, &isWorks);
                 return -1;
             }
         }
         i += 2;
     }
-    return 0;
-}
-
-bool testOperations()
-{
-    return isOperation('+') && isOperation('-') && isOperation('*') && isOperation('/');
+    if (head != NULL && head->next == NULL)
+    {
+        int result = head->value;
+        deleteStack(&head, &isWorks);
+        return isWorks ? result : -1;
+    }
+    deleteStack(&head, &isWorks);
+    *isWorks = false;
+    return -1;
 }
 
 bool testShortCorrectCase()
 {
-    StackElement* head = NULL;
-    char expression[ARRAY_SIZE] = "1\0";
-    const int result = runMainComputationProgram(&head, expression);
-    if (result == -1)
-    {
-        return false;
-    }
+    char expression[ARRAY_SIZE] = "1"; 
     int correctResult = 1;
-    return head->value == correctResult;
+    bool isWorks = true;
+    const int result = runMainComputationProgram(expression, &isWorks);
+    return isWorks && result == correctResult;
 }
 
 bool testLongCorrectCase()
 {
-    StackElement* head = NULL;
     char expression[ARRAY_SIZE] = "1 2 6 + * 2 4 - /\0";
-    const int result = runMainComputationProgram(&head, expression);
-    if (result == -1)
-    {
-        return false;
-    }
     int correctResult = -4;
-    return head->value == correctResult;
+    bool isWorks = true;
+    const int result = runMainComputationProgram(expression, &isWorks);
+    return isWorks && result == correctResult;
 }
 
 int main()
 {
-    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks() || !testOperations() || !testShortCorrectCase() || !testLongCorrectCase())
+    if (!testIsEmpty() || !testPopEmptyStack() || !testStackWorks() || !testShortCorrectCase() || !testLongCorrectCase())
     {
         printf("Tests failed:(");
         return -1;
     }
-    StackElement* head = NULL;
     char expression[ARRAY_SIZE] = "";
     gets_s(expression, ARRAY_SIZE);
-    const int result = runMainComputationProgram(&head, expression);
-    if (result == -1)
+    bool isWorks = true;
+    const int result = runMainComputationProgram(expression, &isWorks);
+    if (!isWorks)
     {
         printf("At some step there were too few variables in the stack, the program could not complete correctly :(");
         return -1;
     }
-    printf("Result of calculations is %d", head->value);
+    printf("Result of calculations is %d", result);
     return 0;
 }
