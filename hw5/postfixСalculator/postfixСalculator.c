@@ -30,7 +30,7 @@ int doСalculation(int first, int second, char symbol)
     }
 }
 
-int runMainComputationProgram(char* expression, bool* isWorks)
+int compute(const char* expression, bool* isWorks)
 {
     StackElement* head = NULL;
     bool continueCalculations = true;
@@ -38,8 +38,7 @@ int runMainComputationProgram(char* expression, bool* isWorks)
     while (continueCalculations)
     {
         const char element = expression[i];
-        const char ch = expression[i + 1];
-        if (ch == '\0')
+        if (expression[i + 1] == '\0')
         {
             continueCalculations = false;
         }
@@ -51,18 +50,17 @@ int runMainComputationProgram(char* expression, bool* isWorks)
                 deleteStack(&head, isWorks);
                 return -1;
             }
-            int first = pop(&head, isWorks);
+            const int first = pop(&head, isWorks);
             if (isEmpty(head) || !isWorks)
             {
                 *isWorks = false;
                 deleteStack(&head, isWorks);
                 return -1;
             }
-            int second = pop(&head, isWorks);
+            const int second = pop(&head, isWorks);
             bool isAdded = push(&head, doСalculation(first, second, element));
             if (!isAdded || !isWorks)
             {
-                printf("Some stack errors were occurred.");
                 *isWorks = false;
                 deleteStack(&head, isWorks);
                 return -1;
@@ -73,7 +71,6 @@ int runMainComputationProgram(char* expression, bool* isWorks)
             bool isAdded = push(&head, atoi(&element));
             if (!isAdded)
             {
-                printf("Some stack errors were occurred.");
                 *isWorks = false;
                 deleteStack(&head, isWorks);
                 return -1;
@@ -97,7 +94,7 @@ bool testShortCorrectCase()
     char expression[ARRAY_SIZE] = "1"; 
     int correctResult = 1;
     bool isWorks = true;
-    const int result = runMainComputationProgram(expression, &isWorks);
+    const int result = compute(expression, &isWorks);
     return isWorks && result == correctResult;
 }
 
@@ -106,7 +103,7 @@ bool testLongCorrectCase()
     char expression[ARRAY_SIZE] = "1 2 6 + * 2 4 - /\0";
     int correctResult = -4;
     bool isWorks = true;
-    const int result = runMainComputationProgram(expression, &isWorks);
+    const int result = compute(expression, &isWorks);
     return isWorks && result == correctResult;
 }
 
@@ -117,10 +114,11 @@ int main()
         printf("Tests failed:(");
         return -1;
     }
+    printf("Enter data in reverse Polish notation:\n");
     char expression[ARRAY_SIZE] = "";
     gets_s(expression, ARRAY_SIZE);
     bool isWorks = true;
-    const int result = runMainComputationProgram(expression, &isWorks);
+    const int result = compute(expression, &isWorks);
     if (!isWorks)
     {
         printf("At some step there were too few variables in the stack, the program could not complete correctly :(");

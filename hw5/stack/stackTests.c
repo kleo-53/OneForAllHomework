@@ -42,7 +42,7 @@ bool testPopEmptyStack()
     bool isDeleted = true;
     const int popValue = pop(&stack, &isWorks);
     deleteStack(&stack, &isDeleted);
-    return !isWorks && isDeleted ? true : false;
+    return !isWorks && isDeleted;
 }
 
 bool testIsEmpty()
