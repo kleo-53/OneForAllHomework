@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 #include <stdbool.h>
 
 // This is strust of list, it consists of list elements
@@ -27,3 +28,6 @@ bool deleteData(List* list, int value);
 
 // This function prints the list
 void printList(List* list);
+
+// This function prints the list into test file
+void printListInFile(List* list, FILE* file);

@@ -107,3 +107,13 @@ void printList(List* list)
         current = current->next;
     }
 }
+
+void printListInFile(List* list, FILE* file)
+{
+    ListElement* current = list->head;
+    while (current != NULL)
+    {
+        fprintf(file, "%d ", current->value);
+        current = current->next;
+    }
+}
