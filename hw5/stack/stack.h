@@ -12,10 +12,10 @@ typedef struct StackElement
 // This function adds an element to the beginning of the stack
 bool push(StackElement** head, int number);
 // This function deletes an element of the beginning of the stack
-int pop(StackElement** head);
+int pop(StackElement** head, bool* isDeleted);
 
 // This boolean function checks if stack is empty
 bool isEmpty(StackElement* head);
 
-// This function delete stack and free the memory
-void deleteStack(StackElement** head);
+// This function deletes stack and frees the memory
+void deleteStack(StackElement** head, bool* isDeleted);
