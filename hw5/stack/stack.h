@@ -5,12 +5,13 @@
 // A stack structure that consists of a value and a pointer to the next element
 typedef struct StackElement
 {
-    char value;
+    int value;
     struct StackElement* next;
 } StackElement;
 
 // This function adds an element to the beginning of the stack
 bool push(StackElement** head, int number);
+
 // This function deletes an element of the beginning of the stack
 int pop(StackElement** head, bool* isDeleted);
 
