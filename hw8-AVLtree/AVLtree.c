@@ -149,7 +149,7 @@ bool addValueRecursive(Node* node, int key, char* value, bool* isWork)
             if (newNode == NULL)
             {
                 *isWork = false;
-                return;
+                return true;
             }
             newNode->key = key;
             newNode->parent = node;
@@ -285,7 +285,7 @@ bool deleteNodeRecursive(Node* node, int key, bool* isWork)
 {
     if (node == NULL)
     {
-        return;
+        return true;
     }
     if (key == node->key)
     {
@@ -296,13 +296,13 @@ bool deleteNodeRecursive(Node* node, int key, bool* isWork)
             if (value == NULL)
             {
                 *isWork = false;
-                return;
+                return true;
             }
             strcpy(value, subNode->value);
             node->value = value;
             node->key = subNode->key;
             node->balance = subNode->balance;
-            free(subNode);
+            deleteNodeRecursive(subNode, subNode->key, isWork);
             node = balance(node);
             return (node->balance != -1 && node->balance != 1);
         }
@@ -334,7 +334,7 @@ bool deleteNodeRecursive(Node* node, int key, bool* isWork)
                 node->parent->rightSon = node->rightSon;
             }
         }
-        //free(node->value);
+        free(node->value);
         free(node);
         return true;
     }
