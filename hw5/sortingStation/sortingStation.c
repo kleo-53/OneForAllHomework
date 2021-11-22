@@ -39,7 +39,7 @@ void doSorting(const char* givenString, char* resultString, bool* isWorks)
     StackElement* head = NULL;
     int newIndex = 0;
     int givenIndex = 0;
-    int strSize = strlen(givenString);
+    const int strSize = strlen(givenString);
     while (givenIndex != strSize)
     {
         char element = givenString[givenIndex];
