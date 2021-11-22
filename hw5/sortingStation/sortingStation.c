@@ -52,7 +52,7 @@ void doSorting(const char* givenString, char* resultString, bool* isWorks)
         {
             while (!isEmpty(head))
             {
-                char topElement = pop(&head, isWorks);
+                const char topElement = pop(&head, isWorks);
                 if (!isWorks)
                 {
                     deleteStack(&head, isWorks);
