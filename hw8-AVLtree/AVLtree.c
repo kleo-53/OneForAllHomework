@@ -265,27 +265,21 @@ char* getValue(Tree* tree, int key, bool* isWork)
 
 Node* subsequentNode(Node* node)
 {
-    Node* leftInRights = node->leftSon;
-    int lengthRight = 1;
-    while (leftInRights->leftSon != NULL)
-    {
-        leftInRights = leftInRights->leftSon;
-        ++lengthRight;
-    }
     Node* rightInLefts = node->leftSon;
     int lengthLeft = 1;
-    while (rightInLefts->leftSon != NULL)
+    while (rightInLefts->rightSon != NULL)
     {
-        rightInLefts = rightInLefts->leftSon;
+        rightInLefts = rightInLefts->rightSon;
         ++lengthLeft;
     }
-    return (lengthLeft < lengthRight) ? leftInRights : rightInLefts;
+    return rightInLefts;
 }
-bool deleteNodeRecursive(Node* node, int key, bool* isWork)
+Node* deleteNodeRecursive(Node* node, int key, bool* isWork, bool* result)
 {
     if (node == NULL)
     {
-        return true;
+        *result = true;
+        return NULL;
     }
     if (key == node->key)
     {
@@ -296,15 +290,18 @@ bool deleteNodeRecursive(Node* node, int key, bool* isWork)
             if (value == NULL)
             {
                 *isWork = false;
-                return true;
+                *result = true;
+                return NULL;
             }
             strcpy(value, subNode->value);
             node->value = value;
+            free(value);
             node->key = subNode->key;
-            node->balance = subNode->balance;
-            deleteNodeRecursive(subNode, subNode->key, isWork);
+            node->balance = subNode->balance - 1;
+            subNode = deleteNodeRecursive(subNode, subNode->key, isWork, result);
             node = balance(node);
-            return (node->balance != -1 && node->balance != 1);
+            *result = (node->balance != -1 && node->balance != 1);
+            return node;
         }
         if (node->rightSon == NULL)
         {
@@ -313,7 +310,7 @@ bool deleteNodeRecursive(Node* node, int key, bool* isWork)
                 node->leftSon->parent = node->parent;
             }
 
-            if (key < node->parent->key)
+            if (key <= node->parent->key)
             {
                 node->parent->leftSon = node->leftSon;
             }
@@ -325,7 +322,7 @@ bool deleteNodeRecursive(Node* node, int key, bool* isWork)
         else
         {
             node->rightSon->parent = node->parent;
-            if (key < node->parent->key)
+            if (key <= node->parent->key)
             {
                 node->parent->leftSon = node->rightSon;
             }
@@ -336,31 +333,38 @@ bool deleteNodeRecursive(Node* node, int key, bool* isWork)
         }
         free(node->value);
         free(node);
-        return true;
+        *result = true;
+        return NULL;
     }
     if (key < node->key)
     {
-        if (deleteNodeRecursive(node->leftSon, key, isWork) == true)
+        node->leftSon = deleteNodeRecursive(node->leftSon, key, isWork, result);
+        if (*result == true)
         {
             node->balance += 1;
             node = balance(node);
-            return (node->balance != -1 && node->balance != 1);
+            *result = node->balance != -1 && node->balance != 1;
+            return node;
         }
-        return false;
+        *result = false;
+        return node;
     }
     else
     {
-        if (deleteNodeRecursive(node->rightSon, key, isWork) == true)
+        node->rightSon = deleteNodeRecursive(node->rightSon, key, isWork, result);
+        if (*result == true)
         {
             node->balance -= 1;
             node = balance(node);
-            return (node->balance != -1 && node->balance != 1);
+            *result = node->balance != -1 && node->balance != 1;
+            return node;
         }
-        return false;
+        *result = false;
+        return node;
     }
 }
 
-void deleteRoot(Tree* tree, bool* isWork)
+Node* deleteRoot(Tree* tree, bool* isWork, bool* result)
 {
     if (tree->root->leftSon != NULL && tree->root->rightSon != NULL)
     {
@@ -369,15 +373,15 @@ void deleteRoot(Tree* tree, bool* isWork)
         if (value == NULL)
         {
             *isWork = false;
-            return;
+            return NULL;
         }
         strcpy(value, subNode->value);
-        free(subNode->value);
         tree->root->value = value;
         tree->root->key = subNode->key;
-        deleteNodeRecursive(subNode, subNode->key, isWork);
+        subNode = deleteNodeRecursive(subNode, subNode->key, isWork, result);
+        tree->root->balance -= 1;
         tree->root = balance(tree->root);
-        return;
+        return tree->root;
     }
     Node* newRoot = NULL;
     if (tree->root->leftSon != NULL)
@@ -395,10 +399,11 @@ void deleteRoot(Tree* tree, bool* isWork)
     free(tree->root->value);
     free(tree->root);
     tree->root = balance(newRoot);
+    return newRoot;
 }
 
 
-void deleteValue(Tree* tree, int key, bool* isWork)
+void deleteValue(Tree* tree, int key, bool* isWork, bool* result)
 {
     if (isEmpty(tree))
     {
@@ -406,10 +411,10 @@ void deleteValue(Tree* tree, int key, bool* isWork)
     }
     if (key == tree->root->key)
     {
-        deleteRoot(tree, isWork);
+        tree->root = deleteRoot(tree, isWork, result);
         return;
     }
-    deleteNodeRecursive(tree->root, key, isWork);
+    tree->root = deleteNodeRecursive(tree->root, key, isWork, result);
 }
 
 void deleteTreeRecursive(Node* node)
@@ -420,7 +425,6 @@ void deleteTreeRecursive(Node* node)
     }
     deleteTreeRecursive(node->leftSon);
     deleteTreeRecursive(node->rightSon);
-    free(node->value);
     free(node);
     return;
 }

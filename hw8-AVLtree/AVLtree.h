@@ -21,7 +21,7 @@ bool inTree(Tree* tree, int key);
 char* getValue(Tree* tree, int key, bool* isWork);
 
 // This function deletes key and its value from tree
-void deleteValue(Tree* tree, int key, bool* isWork);
+void deleteValue(Tree* tree, int key, bool* isWork, bool* result);
 
 // This function deletes the tree
 void deleteTree(Tree* tree);

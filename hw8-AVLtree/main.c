@@ -62,13 +62,16 @@ int menu(Tree** tree)
     case '4':
     {
         printf("Enter key: ");
-        scanf_s("%d*c", &key);
+        scanf_s("%d%*c", &key);
         bool isWork = true;
-        deleteValue(*tree, key, &isWork);
-        if (!isWork)
+        bool result = true;
+        if (!inTree(*tree, key))
         {
-            printf("Some errors have occured");
+            printf("This key does not exist in dictionary\n");
+            return isWork;
         }
+        deleteValue(*tree, key, &isWork, &result);
+        printf(!isWork ? "Some errors have occured\n" : "This key deleted successfully\n");
         return isWork;
     }
     default:
@@ -95,25 +98,30 @@ bool testCase()
     addValue(tree, 250, "RRSon", &isWork);
     addValue(tree, 111, "RLL", &isWork);
     addValue(tree, 101, "root", &isWork);
-    //char* value135 = getValue(tree, 150, &isWork);
-    //if (!isWork || !inTree(tree, 120) || inTree(tree, 1) || value135 == NULL || strcmp("rootRSon", value135) != 0)
-    //{
-    //    deleteTree(tree);
-    //    return false;
-    //}
-    addValue(tree, 101, "RLLL", &isWork);
-    char* value2 = getValue(tree, 101, &isWork);
-    char* value3 = getValue(tree, 1023, &isWork);
-    if (!isWork || /*value2 == NULL|| strcmp("RLLL", value2) != 0 ||*/  !inTree(tree, 101) || value3 != NULL)
+    char* value = getValue(tree, 150, &isWork);
+    if (!isWork || !inTree(tree, 120) || inTree(tree, 1) || value == NULL || strcmp("rootRSon", value) != 0)
     {
         deleteTree(tree);
         return false;
     }
-    deleteValue(tree, 101, &isWork);
-    deleteValue(tree, 120, &isWork);
-    deleteValue(tree, 50, &isWork);
-    deleteValue(tree, 100, &isWork);
-    deleteValue(tree, 150, &isWork);
+    addValue(tree, 101, "RLLL", &isWork);
+    char* value2 = getValue(tree, 101, &isWork);
+    char* value3 = getValue(tree, 1023, &isWork);
+    if (!isWork || value2 == NULL|| strcmp("RLLL", value2) != 0 || !inTree(tree, 101) || value3 != NULL)
+    {
+        deleteTree(tree);
+        return false;
+    }
+    bool result = true;
+    deleteValue(tree, 101, &isWork, &result);
+    result = true;
+    deleteValue(tree, 120, &isWork, &result);
+    result = true;
+    deleteValue(tree, 50, &isWork, &result);
+    result = true;
+    deleteValue(tree, 100, &isWork, &result);
+    result = true;
+    deleteValue(tree, 150, &isWork, &result);
     if (!isWork || inTree(tree, 120) || !inTree(tree, 111) || !inTree(tree, 75) || inTree(tree, 100) || !inTree(tree, 25) || !inTree(tree, 250) || inTree(tree, 50))
     {
         deleteTree(tree);
