@@ -127,7 +127,6 @@ void doSorting(const char* givenString, char* resultString, bool* isWorks)
         ++newIndex;
     }
     deleteStack(&head, isWorks);
-    return;
 }
 
 bool testCorrectCase()
