@@ -72,7 +72,8 @@ int main()
     }
     int inputNumber = 0;
     bool isWork = true;
-    while (!feof(file)) {
+    while (!feof(file)) 
+    {
         fscanf_s(file, "%d", &inputNumber);
         isWork = addData(myList, inputNumber);
         if (!isWork)
