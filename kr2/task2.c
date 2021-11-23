@@ -55,6 +55,6 @@ int main()
         }
         fprintf(outfile, "\n");
     }
-    fclose(file);
+    fclose(outfile);
     return 0;
 }
