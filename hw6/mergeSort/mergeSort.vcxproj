@@ -141,8 +141,10 @@
   <ItemGroup>
     <ClCompile Include="mergeSort.c" />
     <ClCompile Include="List.c" />
+    <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mergeSort.h" />
     <ClInclude Include="List.h" />
   </ItemGroup>
   <ItemGroup>

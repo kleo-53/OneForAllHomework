@@ -41,7 +41,6 @@ int sizeOfList(List* list)
 
 bool addElement(List* list, char* name, char* phone)
 {
-    list->size++;
     char* newName = malloc(strlen(name) + 1);
     if (newName == NULL)
     {
@@ -65,6 +64,7 @@ bool addElement(List* list, char* name, char* phone)
     newElement->name = newName;
     newElement->phone = newPhone;
     newElement->next = NULL;
+    list->size++;
     if (isEmpty(list))
     {
         list->head = newElement;
@@ -101,7 +101,6 @@ void deleteList(List* list)
         free(temporary);
         temporary = list->head;
     }
-    free(list);
     return;
 }
 
