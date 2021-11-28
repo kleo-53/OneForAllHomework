@@ -116,7 +116,7 @@ bool testWorkSix()
     List* warriorsList = createList();
     int result = doExecution(6, 3);
     deleteList(warriorsList);
-    return result == 1 ? true : false;
+    return result == 1;
 }
 
 bool testWorkOne()
@@ -124,7 +124,7 @@ bool testWorkOne()
     List* warriorsList = createList();
     int result = doExecution(1, 10);
     deleteList(warriorsList);
-    return result == 1 ? true : false;
+    return result == 1;
 }
 
 bool testWorkMany()
@@ -132,7 +132,7 @@ bool testWorkMany()
     List* warriorsList = createList();
     int result = doExecution(19, 31);
     deleteList(warriorsList);
-    return result == 18 ? true : false;
+    return result == 18;
 }
 
 int main()

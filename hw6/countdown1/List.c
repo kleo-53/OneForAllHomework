@@ -96,7 +96,6 @@ void deleteList(List* list)
     {
         deleteElement(list);
     }
-    free(list->head);
     free(list);
     return;
 }
