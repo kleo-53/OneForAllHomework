@@ -9,12 +9,21 @@
 
 #define ARRAY_SIZE 40
 
+bool isOpeningBracket(const char element)
+{
+    return element == '(' || element == '[' || element == '{';
+}
+
+bool iClosingBracket(char element)
+{
+    return element == ')' || element == ']' || element == '}';
+}
+
 bool smartAddElement(StackElement** stack, char element)
 {
-    if (element == '(' || element == '[' || element == '{')
+    if (isOpeningBracket(element))
     {
-        bool isAdded = push(stack, element);
-        return isAdded;
+        return push(stack, element);
     }
     if (isEmpty(*stack))
     {
@@ -22,31 +31,21 @@ bool smartAddElement(StackElement** stack, char element)
     }
     bool isWorks = true;
     char popElement = pop(stack, &isWorks);
-    if (isWorks & (popElement == '{' && element == '}') || (popElement == '[' && element == ']') || (popElement == '(' && element == ')'))
-    {
-        return true;
-    }
-    bool isAdded = push(stack, popElement);
-    if (!isAdded)
-    {
-        return false;
-    }
-    return push(stack, element);
+    return isWorks & (popElement == '{' && element == '}') || (popElement == '[' && element == ']') || (popElement == '(' && element == ')');
 }
 
-bool isBracket(char element)
+bool isBracket(const char element)
 {
-    return element == '(' || element == ')' || element == '[' || element == ']' || element == '{' || element == '}';
+    return isOpeningBracket(element) || iClosingBracket(element);
 }
 
 bool isSequenceCorrect(const char* givenString)
 {
     StackElement* head = NULL;
     char element = ' ';
-    bool continueWork = true;
     bool isWorks = true;
     int i = 0;
-    int stringSize = strlen(givenString);
+    const int stringSize = strlen(givenString);
     while (i != stringSize)
     {
         element = givenString[i];
@@ -90,6 +89,7 @@ int main()
     int stringSize = 0;
     char inputString[ARRAY_SIZE] = { " " };
     bool continueWork = true;
+    printf("Enter a sequence of brackets: \n");
     scanf_s("%[^\n]s", &inputString, ARRAY_SIZE);
     if (isSequenceCorrect(inputString))
     {
