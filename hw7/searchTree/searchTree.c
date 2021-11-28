@@ -28,23 +28,30 @@ int menu(Tree** tree)
         printf("Enter value: ");
         char value[ARRAY_SIZE] = "";
         scanf_s("%s", &value, ARRAY_SIZE);
-        bool isWork = true;
-        addValue(*tree, key, value, isWork);
+        bool isWorking = true;
+        addValue(*tree, key, value, &isWorking);
         scanf_s("%*c");
         printf("\n");
-        if (!isWork)
+        if (!isWorking)
         {
             printf("Some errors have occured");
         }
-        return isWork;
+        return isWorking;
     }
     case '2':
     {
         printf("Enter key: ");
         scanf_s("%d%*c", &key);
-        char value[ARRAY_SIZE] = "";
-        strcat(value, getValue(*tree, key));
-        printf(strcmp(value, "err") == 0 ? "There is not such value for this key\n" : "Value for this key is: %s\n", value);
+        if (getValue(*tree, key) == NULL)
+        {
+            printf("There is not such value for this key\n");
+        }
+        else
+        {
+            char value[ARRAY_SIZE] = "";
+            strcpy(value, getValue(*tree, key));
+            printf("Value for this key is: %s\n", value);
+        }
         return true;
     }
     case '3':
@@ -58,13 +65,13 @@ int menu(Tree** tree)
     {
         printf("Enter key: ");
         scanf_s("%d", &key);
-        bool isWork = true;
-        deleteValue(*tree, key, isWork);
-        if (!isWork)
+        bool isWorking = true;
+        deleteValue(*tree, key, &isWorking);
+        if (!isWorking)
         {
             printf("Some errors have occured");
         }
-        return isWork;
+        return isWorking;
     }
     default:
         printf("Invalid command\n");
@@ -80,33 +87,33 @@ bool testCase()
         deleteTree(tree);
         return false;
     }
-    bool isWork = true;
-    addValue(tree, 100, "root", isWork);
-    addValue(tree, 50, "rootLSon", isWork);
-    addValue(tree, 150, "rootRSon", isWork);
-    addValue(tree, 25, "LLSon", isWork);
-    addValue(tree, 75, "LRSon", isWork);
-    addValue(tree, 120, "RLSon", isWork);
-    addValue(tree, 250, "RRSon", isWork);
-    addValue(tree, 111, "RLL", isWork);
-    addValue(tree, 101, "root", isWork);
-    if (!isWork || !inTree(tree, 120) || inTree(tree, 1) || strcmp("rootRSon", getValue(tree, 150)) != 0)
+    bool isWorking = true;
+    addValue(tree, 100, "root", &isWorking);
+    addValue(tree, 50, "rootLSon", &isWorking);
+    addValue(tree, 150, "rootRSon", &isWorking);
+    addValue(tree, 25, "LLSon", &isWorking);
+    addValue(tree, 75, "LRSon", &isWorking);
+    addValue(tree, 120, "RLSon", &isWorking);
+    addValue(tree, 250, "RRSon", &isWorking);
+    addValue(tree, 111, "RLL", &isWorking);
+    addValue(tree, 101, "root", &isWorking);
+    if (!isWorking || !inTree(tree, 120) || inTree(tree, 1) || strcmp("rootRSon", getValue(tree, 150)) != 0)
     {
         deleteTree(tree);
         return false;
     }
-    addValue(tree, 101, "RLLL", isWork);
-    if (!isWork || strcmp("RLLL", getValue(tree, 101)) != 0 || !inTree(tree, 101) || strcmp(getValue(tree, 1023), "err") != 0)
+    addValue(tree, 101, "RLLL", &isWorking);
+    if (!isWorking || strcmp("RLLL", getValue(tree, 101)) != 0 || !inTree(tree, 101) || getValue(tree, 1023) != NULL)
     {
         deleteTree(tree);
         return false;
     }
-    deleteValue(tree, 101, isWork);
-    deleteValue(tree, 120, isWork);
-    deleteValue(tree, 50, isWork);
-    deleteValue(tree, 100, isWork);
-    deleteValue(tree, 150, isWork);
-    if (!isWork || inTree(tree, 120) || !inTree(tree, 111) || !inTree(tree, 75) || inTree(tree, 100) || !inTree(tree, 25) || !inTree(tree, 250) || inTree(tree, 50))
+    deleteValue(tree, 101, &isWorking);
+    deleteValue(tree, 120, &isWorking);
+    deleteValue(tree, 50, &isWorking);
+    deleteValue(tree, 100, &isWorking);
+    deleteValue(tree, 150, &isWorking);
+    if (!isWorking || inTree(tree, 120) || !inTree(tree, 111) || !inTree(tree, 75) || inTree(tree, 100) || !inTree(tree, 25) || !inTree(tree, 250) || inTree(tree, 50))
     {
         deleteTree(tree);
         return false;
