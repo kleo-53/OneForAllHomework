@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4f99763e-b8f0-407b-9bea-16611eac677a}</ProjectGuid>
-    <RootNamespace>stack</RootNamespace>
+    <ProjectGuid>{2112b8ed-ccd0-4510-8e6e-fe49fd6b2566}</ProjectGuid>
+    <RootNamespace>moduleSort</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -85,7 +85,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
@@ -139,15 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="mainStack.c">
-      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</TreatWarningAsError>
-    </ClCompile>
-    <ClCompile Include="stack.c" />
-    <ClCompile Include="stackTests.c" />
+    <ClCompile Include="moduleSort.c" />
+    <ClCompile Include="myQsort.c" />
+    <ClCompile Include="qsortTests.c" />
+    <ClCompile Include="frequentElement.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stack.h" />
-    <ClInclude Include="stackTests.h" />
+    <ClInclude Include="frequentElement.h" />
+    <ClInclude Include="myQsort.h" />
+    <ClInclude Include="qsortTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

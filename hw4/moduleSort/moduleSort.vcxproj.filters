@@ -15,21 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stack.c">
+    <ClCompile Include="moduleSort.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="stackTests.c">
+    <ClCompile Include="myQsort.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="mainStack.c">
+    <ClCompile Include="qsortTests.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="frequentElement.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stack.h">
+    <ClInclude Include="myQsort.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="stackTests.h">
+    <ClInclude Include="qsortTests.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="frequentElement.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

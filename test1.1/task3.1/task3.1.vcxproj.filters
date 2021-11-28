@@ -15,22 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stack.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="stackTests.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="mainStack.c">
+    <ClCompile Include="task3.1.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stack.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="stackTests.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
+    <Text Include="f.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="g.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="h.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="f1.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="g1.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="h1.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>
