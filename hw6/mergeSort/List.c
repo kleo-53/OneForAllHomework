@@ -101,7 +101,7 @@ void deleteList(List* list)
         free(temporary);
         temporary = list->head;
     }
-    return;
+    free(list);
 }
 
 char* getHeadName(List* list)
