@@ -4,27 +4,13 @@
 #include <string.h>
 #include <stdbool.h>
 #include "tree.h"
+#include "treeTests.h"
 
 #define ARRAY_SIZE 50
 
-bool testCase()
-{
-    bool isWork = true;
-    Tree* tree = createAndAdd("(* (+ 1 11) 2)", &isWork);
-    if (isEmpty(tree) || !isWork)
-    {
-        deleteTree(tree);
-        return false;
-    }
-    const int result = doCalculation(tree);
-    int correctResult = 24;
-    deleteTree(tree);
-    return result == correctResult;
-}
-
 int main()
 {
-    if (!testCase())
+    if (!testSmallCase() || !testBigCase() || !testWithoutBracketsCase() || !testIncorrectDividing())
     {
         printf("Tests failed:(");
         return -1;
@@ -32,34 +18,30 @@ int main()
     FILE* file = fopen("input.txt", "r");
     if (file == NULL)
     {
-        printf("some errors have occured");
+        printf("Some errors have occured");
         return -1;
     }
     char givenString[ARRAY_SIZE] = "";
-    int index = 0;
-    char currentSymbol = ' ';
-    currentSymbol = fgetc(file);
-    while (currentSymbol != EOF)
-    {
-        if (currentSymbol == '\n')
-        {
-            break;
-        }
-        givenString[index] = currentSymbol;
-        ++index;
-        currentSymbol = fgetc(file);
-    }
+    fgets(givenString, ARRAY_SIZE, file);
     fclose(file);
-    bool isWork = true;
-    Tree* tree = createAndAdd(givenString, isWork);
-    if (!isWork)
+    bool isWorking = true;
+    Tree* tree = createAndAdd(givenString, &isWorking);
+    if (!isWorking)
     {
         printf("some errors have occured");
         return -1;
     }
     printf("All data in tree:\n");
     printTree(tree);
-    printf("\nAnd calculations result is: %d", doCalculation(tree));
+    const int result = doCalculation(tree, &isWorking);
+    if (isWorking)
+    {
+        printf("\nAnd calculations result is: %d", result);
+    }
+    else
+    {
+        printf("\nCannot be divided by zero!");
+    }
     deleteTree(tree);
     return 0;
 }

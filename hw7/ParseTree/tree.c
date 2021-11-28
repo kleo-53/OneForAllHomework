@@ -24,7 +24,7 @@ bool isEmpty(Tree* tree)
     return tree->root == NULL;
 }
 
-int numberConvert(char* givenString, int* index)
+int numberConvert(const char* givenString, int* index)
 {
     int number = 0;
     while (givenString[*index] >= '0' && givenString[*index] <= '9')
@@ -40,9 +40,9 @@ bool isOperation(char symbol)
     return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
 }
 
-Node* addNodeRecursive(char* givenString, int* index, bool* isWork)
+Node* addNodeRecursive(const char* givenString, int* index, bool* isWorking)
 {
-    if (!(*isWork))
+    if (!(*isWorking))
     {
         return NULL;
     }
@@ -55,14 +55,14 @@ Node* addNodeRecursive(char* givenString, int* index, bool* isWork)
     Node* newNode = calloc(1, sizeof(Node));
     if (newNode == NULL)
     {
-        *isWork = false;
+        *isWorking = false;
         return NULL;
     }
     if (isOperation(givenString[*index]))
     {
         newNode->operation = givenString[*index];
-        newNode->leftSon = addNodeRecursive(givenString, index, isWork);
-        newNode->rightSon = addNodeRecursive(givenString, index, isWork);
+        newNode->leftSon = addNodeRecursive(givenString, index, isWorking);
+        newNode->rightSon = addNodeRecursive(givenString, index, isWorking);
     }
     else
     {
@@ -71,43 +71,50 @@ Node* addNodeRecursive(char* givenString, int* index, bool* isWork)
     return newNode;
 }
 
-Tree* createAndAdd(char* givenString, bool* isWork)
+Tree* createAndAdd(char* givenString, bool* isWorking)
 {
     Tree* tree = calloc(1, sizeof(Tree));
     if (tree == NULL)
     {
-        *isWork = false;
+        *isWorking = false;
         return NULL;
     }
     int index = -1;
-    tree->root = addNodeRecursive(givenString, &index, &isWork);
+    tree->root = addNodeRecursive(givenString, &index, isWorking);
     return tree;
 }
 
-int calculateRecursive(Node* node)
+int calculateRecursive(Node* node, bool* isWorking)
 {
     if (node->leftSon == NULL && node->rightSon == NULL)
     {
         return node->operand;
     }
-    int operandFirst = calculateRecursive(node->leftSon);
-    int operandSecond = calculateRecursive(node->rightSon);
+    const int operandFirst = calculateRecursive(node->leftSon, isWorking);
+    const int operandSecond = calculateRecursive(node->rightSon, isWorking);
     switch (node->operation)
     {
     case '+':
         return operandFirst + operandSecond;
     case '-':
         return operandFirst - operandSecond;
-    case '*':
-        return operandFirst * operandSecond;
+    case '/':
+    {
+        if (operandSecond == 0)
+        {
+            *isWorking = false;
+            return - 1;
+        }
+        return operandFirst / operandSecond;
+    }
     default:
-        return operandFirst / operandSecond;;
+        return operandFirst * operandSecond;
     }
 }
 
-int doCalculation(Tree* tree)
+int doCalculation(Tree* tree, bool* isWorking)
 {
-    return calculateRecursive(tree->root);
+    return calculateRecursive(tree->root, isWorking);
 }
 
 void printRecursive(Node* node)
@@ -122,7 +129,6 @@ void printRecursive(Node* node)
     printf(" ");
     printRecursive(node->rightSon);
     printf(" )");
-    return;
 }
 
 void printTree(Tree* tree)
@@ -132,7 +138,6 @@ void printTree(Tree* tree)
         return;
     }
     printRecursive(tree->root);
-    return;
 }
 
 void deleteChildren(Node* node)
