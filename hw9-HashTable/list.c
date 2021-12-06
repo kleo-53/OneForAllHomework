@@ -1,6 +1,9 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "list.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 typedef struct ListElement
 {
@@ -86,6 +89,20 @@ bool inList(List* list, char* word)
     return false;
 }
 
+int quantityFromHead(List* list)
+{
+    return list->head->counter;
+}
+
+char* returnFromHead(List* list)
+{
+    if (isEmpty(list))
+    {
+        return NULL;
+    }
+    return list->head->word;
+}
+
 void deleteFromHead(List* list)
 {
     if (isEmpty(list))
@@ -94,7 +111,6 @@ void deleteFromHead(List* list)
     }
     ListElement* current = list->head;
     list->head = list->head->next;
-    free(current->word);
     free(current);
 }
 
@@ -112,7 +128,7 @@ void printList(List* list)
     ListElement* current = list->head;
     while (current != NULL)
     {
-        printf("%s - %d times", current->word, current->counter);
+        printf("%s - %d times\n", current->word, current->counter);
         current = current->next;
     }
 }

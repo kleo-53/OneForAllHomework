@@ -14,6 +14,12 @@ bool addWord(List* list, char* givenWord, int currentCount, bool* isWorking);
 // This function gives the length of the list
 int listLength(List* list);
 
+// This function gives the quantity of the head element in the list
+int quantityFromHead(List* list);
+
+// This function returns the value from head of the list
+char* returnFromHead(List* list);
+
 // This function deletes word from head of the list
 void deleteFromHead(List* list);
 
