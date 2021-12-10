@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include "List.h"
 
+typedef enum SortKey
+{
+    name,
+    phone
+} SortKey;
+
 void moveElements(List* listFrom, List* listTo, int counter)
 {
     for (int i = 0; i < counter; ++i)
@@ -14,21 +20,21 @@ void moveElements(List* listFrom, List* listTo, int counter)
     }
 }
 
-int compareHeads(List* firstList, List* secondList, int key)
+int compareHeads(List* firstList, List* secondList, SortKey key)
 {
-    if (key == 1)
+    if (key == name)
     {
-        return (strcmp(getHeadName(firstList), getHeadName(secondList)) < 0);
+        return strcmp(getHeadName(firstList), getHeadName(secondList));
     }
-    return (strcmp(getHeadPhone(firstList), getHeadPhone(secondList)) < 0);
+    return strcmp(getHeadPhone(firstList), getHeadPhone(secondList));
 }
 
-List* merge(List* firstList, List* secondList, int key)
+List* merge(List* firstList, List* secondList, SortKey key)
 {
     List* sortedList = createList();
     while (!sizeOfList(firstList) == 0 && !sizeOfList(secondList) == 0)
     {
-        compareHeads(firstList, secondList, key) == 1
+        compareHeads(firstList, secondList, key) < 0
             ? moveElements(firstList, sortedList, 1)
             : moveElements(secondList, sortedList, 1);
     }
@@ -45,7 +51,7 @@ List* merge(List* firstList, List* secondList, int key)
     return sortedList;
 }
 
-List* mainMergeSort(List** list, int key)
+List* mergeSort(List** list, SortKey key)
 {
     const int size = sizeOfList(*list);
     if (size <= 1)
@@ -57,8 +63,8 @@ List* mainMergeSort(List** list, int key)
     List* secondList = createList();
     moveElements(*list, secondList, size - size / 2);
     deleteList(*list);
-    firstList = mainMergeSort(&firstList, key);
-    secondList = mainMergeSort(&secondList, key);
+    firstList = mergeSort(&firstList, key);
+    secondList = mergeSort(&secondList, key);
     List* resultList = merge(firstList, secondList, key);
     return resultList;
 }
@@ -104,7 +110,7 @@ bool testSortByName()
         deleteList(list);
         return false;
     }
-    List* testListOne = mainMergeSort(&list, 1);
+    List* testListOne = mergeSort(&list, name);
     List* correctListOne = createList();
     isAdded = addElement(correctListOne, "abc", "90") && isAdded;
     isAdded = addElement(correctListOne, "qwerty", "111") && isAdded;
@@ -113,7 +119,6 @@ bool testSortByName()
     {
         deleteList(testListOne);
         deleteList(correctListOne);
-        deleteList(list);
         return false;
     }
     for (int i = 0; i < 3; ++i)
@@ -122,15 +127,13 @@ bool testSortByName()
         {
             deleteList(testListOne);
             deleteList(correctListOne);
-            deleteList(list);
             return false;
         }
         deleteHeadElement(testListOne);
         deleteHeadElement(correctListOne);
     }
-    deleteHeadElement(testListOne);
-    deleteHeadElement(correctListOne);
-    deleteList(list);
+    deleteList(testListOne);
+    deleteList(correctListOne);
     return true;
 }
 
@@ -145,7 +148,7 @@ bool testSortByPhone()
         deleteList(list2);
         return false;
     }
-    List* testListTwo = mainMergeSort(&list2, 2);
+    List* testListTwo = mergeSort(&list2, phone);
     List* correctListTwo = createList();
     isAdded = addElement(correctListTwo, "qwerty", "111") && isAdded;
     isAdded = addElement(correctListTwo, "werty", "22345") && isAdded;
@@ -154,7 +157,6 @@ bool testSortByPhone()
     {
         deleteList(testListTwo);
         deleteList(correctListTwo);
-        deleteList(list2);
         return false;
     }
     for (int i = 0; i < 3; ++i)
@@ -163,7 +165,6 @@ bool testSortByPhone()
         {
             deleteList(testListTwo);
             deleteList(correctListTwo);
-            deleteList(list2);
             return false;
         }
         deleteHeadElement(testListTwo);
@@ -171,6 +172,5 @@ bool testSortByPhone()
     }
     deleteList(testListTwo);
     deleteList(correctListTwo);
-    deleteList(list2);
     return true;
 }

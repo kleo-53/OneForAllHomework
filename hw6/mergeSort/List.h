@@ -1,7 +1,7 @@
 #pragma once
 #include <stdbool.h>
 
-// This is strust of list, it consists of links to previous and next elenents and size of list
+// This is struct of list
 typedef struct List List;
 
 // This function creates empty list
@@ -11,7 +11,7 @@ List* createList();
 bool isEmpty(List* list);
 
 // This function adds element to the list
-bool addElement(List* list, char* name, char* phone);
+bool addElement(List* list, const char* name, const char* phone);
 
 // This function prints the list
 void printList(List* list);

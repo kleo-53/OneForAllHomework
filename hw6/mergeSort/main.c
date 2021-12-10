@@ -8,6 +8,12 @@
 
 #define ARRAY_SIZE 40
 
+typedef enum SortKey
+{
+    name,
+    phone,
+} SortKey;
+
 int main()
 {
     if (!testAddDeleteLength() || !testSortByName() || !testSortByPhone())
@@ -44,7 +50,7 @@ int main()
         deleteList(list);
         return -1;
     }
-    List* mergeSortList = mainMergeSort(&list, command);
+    List* mergeSortList = mergeSort(&list, (command == 2) ? phone : name);
     printf("This is sorted list:\n");
     printList(mergeSortList);
     deleteList(mergeSortList);

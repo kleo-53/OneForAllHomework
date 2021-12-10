@@ -22,11 +22,7 @@ typedef struct List
 
 List* createList()
 {
-    List* newList = (List*)calloc(1, sizeof(List));
-    newList->size = 0;
-    newList->head = NULL;
-    newList->tail = NULL;
-    return newList;
+    return (List*)calloc(1, sizeof(List));
 }
 
 bool isEmpty(List* list)
@@ -39,7 +35,7 @@ int sizeOfList(List* list)
     return list->size;
 }
 
-bool addElement(List* list, char* name, char* phone)
+bool addElement(List* list, const char* name, const char* phone)
 {
     char* newName = malloc(strlen(name) + 1);
     if (newName == NULL)
