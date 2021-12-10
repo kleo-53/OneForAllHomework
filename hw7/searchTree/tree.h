@@ -20,7 +20,8 @@ void addValue(Tree* tree, int key, const char* value, bool* isWorking);
 // This function checks if this key is in the tree
 bool inTree(Tree* tree, int key);
 
-// This function gives a pointer of the value by given key
+// This function gives a pointer of the value by given key 
+// (ownership of the memory it points to remains with the data structure)
 char* getValue(Tree* tree, int key);
 
 // This function deletes the key and the value from the tree

@@ -6,7 +6,7 @@
 
 #define ARRAY_SIZE 50
 
-int menu(Tree** tree)
+int menu(Tree* tree)
 {
     printf("Choose a command:\n");
     printf("0 - Finish programm\n");
@@ -29,7 +29,7 @@ int menu(Tree** tree)
         char value[ARRAY_SIZE] = "";
         scanf_s("%s", &value, ARRAY_SIZE);
         bool isWorking = true;
-        addValue(*tree, key, value, &isWorking);
+        addValue(tree, key, value, &isWorking);
         scanf_s("%*c");
         printf("\n");
         if (!isWorking)
@@ -42,14 +42,14 @@ int menu(Tree** tree)
     {
         printf("Enter key: ");
         scanf_s("%d%*c", &key);
-        if (getValue(*tree, key) == NULL)
+        if (getValue(tree, key) == NULL)
         {
             printf("There is not such value for this key\n");
         }
         else
         {
             char value[ARRAY_SIZE] = "";
-            strcpy(value, getValue(*tree, key));
+            strcpy(value, getValue(tree, key));
             printf("Value for this key is: %s\n", value);
         }
         return true;
@@ -58,7 +58,7 @@ int menu(Tree** tree)
     {
         printf("Enter key: ");
         scanf_s("%d%*c", &key);
-        printf(inTree(*tree, key) ? "This key exists in dictionary\n" : "This key does not exist in dictionary\n");
+        printf(inTree(tree, key) ? "This key exists in dictionary\n" : "This key does not exist in dictionary\n");
         return true;
     }
     case '4':
@@ -66,7 +66,7 @@ int menu(Tree** tree)
         printf("Enter key: ");
         scanf_s("%d", &key);
         bool isWorking = true;
-        deleteValue(*tree, key, &isWorking);
+        deleteValue(tree, key, &isWorking);
         if (!isWorking)
         {
             printf("Some errors have occured");
@@ -113,7 +113,8 @@ bool testCase()
     deleteValue(tree, 50, &isWorking);
     deleteValue(tree, 100, &isWorking);
     deleteValue(tree, 150, &isWorking);
-    if (!isWorking || inTree(tree, 120) || !inTree(tree, 111) || !inTree(tree, 75) || inTree(tree, 100) || !inTree(tree, 25) || !inTree(tree, 250) || inTree(tree, 50))
+    if (!isWorking || inTree(tree, 120) || !inTree(tree, 111) || !inTree(tree, 75) || inTree(tree, 100) || 
+        !inTree(tree, 25) || !inTree(tree, 250) || inTree(tree, 50))
     {
         deleteTree(tree);
         return false;
@@ -134,7 +135,7 @@ int main()
     Tree* tree = createTree();
     while (continueRunning)
     {
-        continueRunning = menu(&tree);
+        continueRunning = menu(tree);
     }
     deleteTree(tree);
     return 0;

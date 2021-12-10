@@ -35,13 +35,13 @@ void addValueRecursive(Node* node, int key, const char* value, bool* isWorking)
     if (strValue == NULL)
     {
         *isWorking = false;
-        free(strValue);
         return;
     }
     strcpy(strValue, value);
     if (node->key == key)
     {
-        node->value = strValue;
+        strcpy(node->value, strValue);
+        free(strValue);
         return;
     }
     if (node->key > key)
@@ -91,7 +91,6 @@ void addValue(Tree* tree, int key, const char* value, bool* isWorking)
     if (strValue == NULL)
     {
         *isWorking = false;
-        free(strValue);
         return;
     }
     strcpy(strValue, value);
@@ -177,8 +176,7 @@ Node* deleteNode(Node* node, int key, bool* isWorking)
             Node* child = (node->leftSon != NULL ? node->leftSon : node->rightSon);
             free(node->value);
             free(node);
-            node = child;
-            return node;
+            return child;
         }
         else
         {
