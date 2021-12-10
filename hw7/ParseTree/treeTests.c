@@ -4,7 +4,7 @@
 bool testSmallCase()
 {
     bool isWorking = true;
-    Tree* tree = createAndAdd("(* (+ 1 11) 2)", &isWorking);
+    Tree* tree = createAndAdd("(- (+ -1 1) 2)", &isWorking);
     if (isEmpty(tree) || !isWorking)
     {
         deleteTree(tree);
@@ -12,7 +12,7 @@ bool testSmallCase()
     }
     const int result = doCalculation(tree, &isWorking);
     deleteTree(tree);
-    return result == 24 && isWorking;
+    return result == -2 && isWorking;
 }
 
 bool testBigCase()
@@ -32,7 +32,7 @@ bool testBigCase()
 bool testWithoutBracketsCase()
 {
     bool isWorking = true;
-    Tree* tree = createAndAdd("*-/ + * 12 10 1 11  1011 -3 4", &isWorking);
+    Tree* tree = createAndAdd("*-/ + * 12 10 1 11  1011 - 3 4", &isWorking);
     if (isEmpty(tree) || !isWorking)
     {
         deleteTree(tree);

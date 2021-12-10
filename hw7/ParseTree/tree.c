@@ -35,9 +35,17 @@ int numberConvert(const char* givenString, int* index)
     return number;
 }
 
-bool isOperation(char symbol)
+bool isOperation(char symbol, char next)
 {
-    return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
+    if (symbol == '+' || symbol == '*' || symbol == '/')
+    {
+        return true;
+    }
+    if (symbol == '-')
+    {
+        return '9' - next < 0 || next - '0' < 0;
+    }
+    return false;
 }
 
 Node* addNodeRecursive(const char* givenString, int* index, bool* isWorking)
@@ -58,7 +66,7 @@ Node* addNodeRecursive(const char* givenString, int* index, bool* isWorking)
         *isWorking = false;
         return NULL;
     }
-    if (isOperation(givenString[*index]))
+    if (isOperation(givenString[*index], givenString[*index + 1]))
     {
         newNode->operation = givenString[*index];
         newNode->leftSon = addNodeRecursive(givenString, index, isWorking);
@@ -66,12 +74,20 @@ Node* addNodeRecursive(const char* givenString, int* index, bool* isWorking)
     }
     else
     {
-        newNode->operand = numberConvert(givenString, index);
+        if (givenString[*index] == '-')
+        {
+            ++*index;
+            newNode->operand = numberConvert(givenString, index) * -1;
+        }
+        else
+        {
+            newNode->operand = numberConvert(givenString, index);
+        }
     }
     return newNode;
 }
 
-Tree* createAndAdd(char* givenString, bool* isWorking)
+Tree* createAndAdd(const char* givenString, bool* isWorking)
 {
     Tree* tree = calloc(1, sizeof(Tree));
     if (tree == NULL)
@@ -155,5 +171,4 @@ void deleteTree(Tree* tree)
 {
     deleteChildren(tree->root);
     free(tree);
-    return;
 }

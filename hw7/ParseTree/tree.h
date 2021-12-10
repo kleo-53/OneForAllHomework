@@ -1,11 +1,11 @@
 #pragma once
 #include <stdbool.h>
 
-// Struct of dictionary tree, where each node consists of an operation, an operand and references to two sons
+// Struct of dictionary tree
 typedef struct Tree Tree;
 
 // This function creates a tree by given string
-Tree* createAndAdd(char* givenString, bool* isWorking);
+Tree* createAndAdd(const char* givenString, bool* isWorking);
 
 // This function deletes tree
 void deleteTree(Tree* tree);

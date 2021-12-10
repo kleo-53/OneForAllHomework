@@ -35,7 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Файлы ресурсов</Filter>
     </Text>
   </ItemGroup>
 </Project>
