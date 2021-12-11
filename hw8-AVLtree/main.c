@@ -2,7 +2,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "AVLtree.h"
+#include "tests.h"
 
 #define ARRAY_SIZE 50
 
@@ -16,7 +18,7 @@ int menu(Tree** tree)
     printf("4 - Delete key and value\n");
     char command = '0';
     scanf_s("%c", &command, 2);
-    int key = 0;
+    char key[ARRAY_SIZE] = "";
     switch (command)
     {
     case '0':
@@ -24,27 +26,27 @@ int menu(Tree** tree)
     case '1':
     {
         printf("Enter key: ");
-        scanf_s("%d", &key);
+        scanf_s("%s", &key, ARRAY_SIZE);
         printf("Enter value: ");
         char value[ARRAY_SIZE] = "";
         scanf_s("%s", &value, ARRAY_SIZE);
-        bool isWork = true;
-        addValue(*tree, key, value, &isWork);
+        bool isWorking = true;
+        addValue(*tree, key, value, &isWorking);
         scanf_s("%*c");
         printf("\n");
-        if (!isWork)
+        if (!isWorking)
         {
             printf("Some errors have occured");
         }
-        return isWork;
+        return isWorking;
     }
     case '2':
     {
         printf("Enter key: ");
-        scanf_s("%d%*c", &key);
-        bool isWork = true;
-        char *value = getValue(*tree, key, &isWork);
-        if (!isWork)
+        scanf_s("%s%*c", &key, ARRAY_SIZE);
+        bool isWorking = true;
+        char *value = getValue(*tree, key, &isWorking);
+        if (!isWorking)
         {
             printf("Some errors have occured");
             return false;
@@ -55,24 +57,25 @@ int menu(Tree** tree)
     case '3':
     {
         printf("Enter key: ");
-        scanf_s("%d%*c", &key);
-        printf(inTree(*tree, key) ? "This key exists in dictionary\n" : "This key does not exist in dictionary\n");
+        scanf_s("%s%*c", &key, ARRAY_SIZE);
+        bool isWorking = true;
+        printf(inTree(*tree, key, &isWorking) ? "This key exists in dictionary\n" : "This key does not exist in dictionary\n");
         return true;
     }
     case '4':
     {
         printf("Enter key: ");
-        scanf_s("%d%*c", &key);
-        bool isWork = true;
+        scanf_s("%s%*c", &key, ARRAY_SIZE);
+        bool isWorking = true;
         bool result = true;
-        if (!inTree(*tree, key))
+        if (!inTree(*tree, key, &isWorking))
         {
             printf("This key does not exist in dictionary\n");
-            return isWork;
+            return isWorking;
         }
-        deleteValue(*tree, key, &isWork, &result);
-        printf(!isWork ? "Some errors have occured\n" : "This key deleted successfully\n");
-        return isWork;
+        deleteValue(*tree, key, &isWorking, &result);
+        printf(!isWorking ? "Some errors have occured\n" : "This key deleted successfully\n");
+        return isWorking;
     }
     default:
         printf("Invalid command\n");
@@ -80,60 +83,9 @@ int menu(Tree** tree)
     }
 }
 
-bool testCase()
-{
-    Tree* tree = createTree();
-    if (!isEmpty(tree))
-    {
-        deleteTree(tree);
-        return false;
-    }
-    bool isWork = true;
-    addValue(tree, 100, "root", &isWork);
-    addValue(tree, 50, "rootLSon", &isWork);
-    addValue(tree, 150, "rootRSon", &isWork);
-    addValue(tree, 25, "LLSon", &isWork);
-    addValue(tree, 75, "LRSon", &isWork);
-    addValue(tree, 120, "RLSon", &isWork);
-    addValue(tree, 250, "RRSon", &isWork);
-    addValue(tree, 111, "RLL", &isWork);
-    addValue(tree, 101, "root", &isWork);
-    char* value = getValue(tree, 150, &isWork);
-    if (!isWork || !inTree(tree, 120) || inTree(tree, 1) || value == NULL || strcmp("rootRSon", value) != 0)
-    {
-        deleteTree(tree);
-        return false;
-    }
-    addValue(tree, 101, "RLLL", &isWork);
-    char* value2 = getValue(tree, 101, &isWork);
-    char* value3 = getValue(tree, 1023, &isWork);
-    if (!isWork || value2 == NULL|| strcmp("RLLL", value2) != 0 || !inTree(tree, 101) || value3 != NULL)
-    {
-        deleteTree(tree);
-        return false;
-    }
-    bool result = true;
-    deleteValue(tree, 101, &isWork, &result);
-    result = true;
-    deleteValue(tree, 120, &isWork, &result);
-    result = true;
-    deleteValue(tree, 50, &isWork, &result);
-    result = true;
-    deleteValue(tree, 100, &isWork, &result);
-    result = true;
-    deleteValue(tree, 150, &isWork, &result);
-    if (!isWork || inTree(tree, 120) || !inTree(tree, 111) || !inTree(tree, 75) || inTree(tree, 100) || !inTree(tree, 25) || !inTree(tree, 250) || inTree(tree, 50))
-    {
-        deleteTree(tree);
-        return false;
-    }
-    deleteTree(tree);
-    return true;
-}
-
 int main()
 {
-    if (!testCase())
+    if (!testAddAndInCase() || !testDeleteAndInCase() || !testGetValueCase() || !testLeftRotation() || !testRightRotation())
     {
         printf("Tests failed:(");
         return -1;
