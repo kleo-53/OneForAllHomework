@@ -44,8 +44,8 @@ bool testSmallCase()
 	{
 		return false;
 	}
-	BinToDecimalString("0", result);
-	bool isOk = strcmp(result, "0") == 0;
+	BinToDecimalString("1", result);
+	bool isOk = strcmp(result, "1") == 0;
 	free(result);
 	return isOk;
 }
