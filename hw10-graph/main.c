@@ -16,7 +16,7 @@ bool testCase()
     }
     const int testRoads[5][3] = { {0, 1, 3}, {0, 2, 18}, {3, 1, 2}, {2, 3, 1}, {1, 2, 4} };
     int** roads = (int**)malloc(20); 
-    if (roads = NULL)
+    if (roads == NULL)
     {
         deleteGraph(graph);
         return -1;
