@@ -44,7 +44,7 @@ bool testCase()
         return false;
     }
     FILE* file = fopen("test2.txt", "r");
-    char* correctCountries[2] = {"0: 0 1 ", "1: 2 3 "};
+    char* correctCountries[2] = {"0: 0 1 \n", "1: 2 3 \n"};
     char* fileString = malloc(20);
     if (fileString == NULL)
     {
@@ -54,7 +54,7 @@ bool testCase()
     for (int i = 0; i < 2; ++i)
     {
         fgets(fileString, 20, file);
-        if (strcmp(fileString, correctCountries[0]) != 0)
+        if (strcmp(fileString, correctCountries[i]) != 0)
         {
             deleteGraph(graph);
             return false;
@@ -79,7 +79,7 @@ int main()
     bool isWorking = true;
     Graph* graph = createGraph(cityCounter, &isWorking);
     int** roads = (int**)malloc(sizeof(int*) * (roadsCounter));
-    if (roads = NULL)
+    if (roads == NULL)
     {
         deleteGraph(graph);
         return -1;
@@ -90,8 +90,8 @@ int main()
     for (int i = 0; i < roadsCounter; ++i)
     {
         fscanf_s(file, "%d %d %d", &firstCity, &secondCity, &length);
-        roads[i] = malloc(sizeof(int) * 3); 
-        if (roads[i] = NULL)
+        roads[i] = malloc(sizeof(int*) * 3);
+        if (roads[i] == NULL)
         {
             deleteGraph(graph);
             return -1;

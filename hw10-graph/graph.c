@@ -121,7 +121,7 @@ void deleteGraph(Graph* graph)
 
 void printNodesByCountries(Graph* graph, bool* isWorking, const bool inFile)
 {
-	int** countries = (int**)malloc((int)sizeof(int*) * graph->countryCounter);
+	int** countries = (int**)malloc(SIZE);
 	if (countries == NULL || (int)sizeof(int) * (graph->countryCounter) > SIZE)
 	{
 		*isWorking = false;
@@ -129,7 +129,7 @@ void printNodesByCountries(Graph* graph, bool* isWorking, const bool inFile)
 	}
 	for (int i = 0; i < graph->nodeCounter; ++i)
 	{
-		countries[i] = malloc(graph->nodeCounter * sizeof(int));
+		countries[i] = malloc(SIZE);
 		if (countries[i] == NULL)
 		{
 			*isWorking = false;
