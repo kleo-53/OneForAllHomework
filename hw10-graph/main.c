@@ -15,7 +15,7 @@ bool testCase()
         return false;
     }
     const int testRoads[5][3] = { {0, 1, 3}, {0, 2, 18}, {3, 1, 2}, {2, 3, 1}, {1, 2, 4} };
-    int** roads = (int**)malloc(20); 
+    int** roads = (int**)malloc(5 * sizeof(int*)); 
     if (roads == NULL)
     {
         deleteGraph(graph);
@@ -23,7 +23,7 @@ bool testCase()
     }
     for (int i = 0; i < 5; ++i)
     {
-        (int*)roads[i] = (int*)malloc(12); 
+        (int*)roads[i] = (int*)malloc(3 * sizeof(int)); 
         if (roads[i] == NULL)
         {
             deleteGraph(graph);
@@ -43,7 +43,7 @@ bool testCase()
         deleteGraph(graph);
         return false;
     }
-    FILE* file = fopen("test2.txt", "r");
+    FILE* file = fopen("output.txt", "r");
     char* correctCountries[2] = {"0: 0 1 \n", "1: 2 3 \n"};
     char* fileString = malloc(20);
     if (fileString == NULL)
@@ -78,7 +78,7 @@ int main()
     fscanf_s(file, "%d", &roadsCounter);
     bool isWorking = true;
     Graph* graph = createGraph(cityCounter, &isWorking);
-    int** roads = (int**)malloc(sizeof(int*) * (roadsCounter));
+    int** roads = (int**)malloc(sizeof(int*) * roadsCounter);
     if (roads == NULL)
     {
         deleteGraph(graph);
