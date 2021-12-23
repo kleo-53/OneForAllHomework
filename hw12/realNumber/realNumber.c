@@ -7,6 +7,19 @@
 
 #define SIZE 32
 
+typedef enum State
+{
+    Start,
+    SeenFirstDigit,
+    SeenDot,
+    SeenDigitAfterDot,
+    SeenE,
+    SeenDigitAfterE,
+    SeenSign,
+    ErrorString
+
+} State;
+
 bool isDigit(const char symbol)
 {
     return (symbol >= '0' && symbol <= '9');
@@ -14,21 +27,17 @@ bool isDigit(const char symbol)
 
 char nextChar(const char* string, long long i)
 {
-    if (i + 1 < (int)strlen(string))
-    {
-        return string[i + 1];
-    }
-    return '\0';
+    return string[i + 1];
 }
 
-bool isCorrectState(int state)
+bool isCorrectState(State state)
 {
-    return state == 1 || state == 3 || state == 5 || state == 7;
+    return state == SeenFirstDigit || state == SeenDigitAfterDot || state == SeenDigitAfterE;
 }
 
-bool machine(char* string)
+bool doLexer(char* string)
 {
-    int state = 0;
+    State state = Start;
     int i = -1;
     while (true)
     {
@@ -40,82 +49,81 @@ bool machine(char* string)
         ++i;
         switch (state)
         {
-        case 0:
+        case Start:
         {
-            state = isDigit(c) ? 1 : -1;
+            state = isDigit(c) ? SeenFirstDigit : ErrorString;
             break;
         }
-        case 1:
+        case SeenFirstDigit:
         {
             if (isDigit(c))
             {
-                state = 1;
+                state = SeenFirstDigit;
             }
             else if (c == '.')
             {
-                state = 2;
-            }
-            else 
-            {
-                state = -1;
-            }
-            break;
-        }
-        case 2:
-        {
-            state = isDigit(c) ? 3 : -1;
-            break;
-        }
-        case 3:
-        {
-            if (isDigit(c))
-            {
-                state = 3;
+                state = SeenDot;
             }
             else if (c == 'E')
             {
-                state = 4;
+                state = SeenE;
             }
-            else
+            else 
             {
-                state = -1;
+                state = ErrorString;
             }
             break;
         }
-        case 4:
+        case SeenDot:
+        {
+            state = isDigit(c) ? SeenDigitAfterDot : ErrorString;
+            break;
+        }
+        case SeenDigitAfterDot:
         {
             if (isDigit(c))
             {
-                state = 5;
+                state = SeenDigitAfterDot;
             }
-            else if (c == '+' || c == '-')
+            else if (c == 'E')
             {
-                state = 6;
+                state = SeenE;
             }
             else
             {
-                state = -1;
+                state = ErrorString;
             }
             break;
         }
-        case 5:
+        case SeenE:
         {
-            state = isDigit(c) ? 5 : -1;
+            if (isDigit(c))
+            {
+                state = SeenDigitAfterE;
+            }
+            else if (c == '+' || c == '-')
+            {
+                state = SeenSign;
+            }
+            else
+            {
+                state = ErrorString;
+            }
             break;
         }
-        case 6:
+        case SeenDigitAfterE:
         {
-            state = isDigit(c) ? 7 : -1;
+            state = isDigit(c) ? SeenDigitAfterE : ErrorString;
             break;
         }
-        case 7:
+        case SeenSign:
         {
-            state = isDigit(c) ? 7 : -1;
+            state = isDigit(c) ? SeenDigitAfterE : ErrorString;
             break;
         }
         default:
         {
-            state = -1;
+            state = ErrorString;
             break;
         }
         }
@@ -125,12 +133,14 @@ bool machine(char* string)
 
 bool testCorrectCase()
 {
-    return machine("21") && machine("21.4") && machine("21.4E35") && machine("21.4E-55") && machine("2342.4234E+999");
+    return doLexer("21") && doLexer("21.4") && doLexer("21.4E35") && doLexer("21.4E-55") &&
+        doLexer("2342.4234E+999") && doLexer("21E48") && doLexer("21E-18");
 }
 
 bool testIncorrectCase()
 {
-    return machine("21.") || machine("23.43E") || machine("23.32E+") || machine("....") || machine("234sdhfisuhg");
+    return doLexer("21.") || doLexer("23.43E") || doLexer("23.32E+") || doLexer("....") || 
+        doLexer("234sdhfisuhg") || doLexer("21E");
 }
 
 int main()
@@ -142,6 +152,6 @@ int main()
     }
     char inputString[SIZE] = { "" };
     scanf_s("%s", &inputString, SIZE);
-    printf(machine(inputString) ? "Yes, it is a real number." : "No, it is not a real number.");
+    printf(doLexer(inputString) ? "Yes, it is a real number." : "No, it is not a real number.");
     return 0;
 }
