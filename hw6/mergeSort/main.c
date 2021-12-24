@@ -8,12 +8,6 @@
 
 #define ARRAY_SIZE 40
 
-typedef enum SortKey
-{
-    name,
-    phone,
-} SortKey;
-
 int main()
 {
     if (!testAddDeleteLength() || !testSortByName() || !testSortByPhone())

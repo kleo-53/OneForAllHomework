@@ -2,7 +2,11 @@
 #include "List.h"
 
 // The key by which sorting is performed
-typedef enum SortKey SortKey;
+typedef enum SortKey
+{
+    name,
+    phone
+} SortKey;
 
 // This function sorts list by merge sort 
 List* mergeSort(List** list, SortKey key);
