@@ -24,6 +24,7 @@ bool testSimpleCase()
         int resultRK = rabinKarp(fileLine, inputLine);
         if (numberLine == 1 && resultRK == 6)
         {
+            fclose(file);
             return true;
         }
         ++numberLine;
@@ -49,6 +50,7 @@ bool testSmallCase()
         int resultRK = rabinKarp(fileLine, inputLine);
         if (numberLine == 2 && resultRK == 5)
         {
+            fclose(file);
             return true;
         }
         ++numberLine;
@@ -74,6 +76,7 @@ bool testHardCase()
         int resultRK = rabinKarp(fileLine, inputLine);
         if (numberLine == 1 && resultRK == 20)
         {
+            fclose(file);
             return true;
         }
         ++numberLine;
@@ -108,6 +111,7 @@ int main()
         int resultRK = rabinKarp(fileLine, inputLine);
         if (resultRK != -1)
         {
+            fclose(file);
             printf("This line first encountered in a file at line %d, position %d.", numberLine, resultRK);
             return 0;
         }
