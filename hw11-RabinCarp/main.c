@@ -28,6 +28,7 @@ bool testSimpleCase()
         }
         ++numberLine;
     }
+    fclose(file);
     return false;
 }
 
@@ -52,6 +53,7 @@ bool testSmallCase()
         }
         ++numberLine;
     }
+    fclose(file);
     return false;
 }
 
@@ -76,6 +78,7 @@ bool testHardCase()
         }
         ++numberLine;
     }
+    fclose(file);
     return false;
 }
 
@@ -110,6 +113,7 @@ int main()
         }
         ++numberLine;
     }
+    fclose(file);
     printf("There is not such line in file:(");
     return 0;
 }
