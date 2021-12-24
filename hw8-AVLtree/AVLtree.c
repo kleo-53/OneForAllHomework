@@ -445,11 +445,11 @@ int getHeightAndIsBalanced(Node* node, bool* balanceTree)
     int heightRight = getHeightAndIsBalanced(node->rightSon, balanceTree);
     if (heightLeft > heightRight)
     {
-        *balanceTree = (heightLeft - heightRight) < 2;
+        *balanceTree = abs(heightLeft - heightRight) < 2;
     }
     else
     {
-        *balanceTree = (heightRight - heightLeft) < 2;
+        *balanceTree = abs(heightRight - heightLeft) < 2;
     }
     return (heightLeft > heightRight) ? heightLeft : heightRight + 1;
 }
