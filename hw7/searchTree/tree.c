@@ -40,8 +40,8 @@ void addValueRecursive(Node* node, int key, const char* value, bool* isWorking)
     strcpy(strValue, value);
     if (node->key == key)
     {
-        strcpy(node->value, strValue);
-        free(strValue);
+        free(node->value);
+        node->value = strValue;
         return;
     }
     if (node->key > key)
